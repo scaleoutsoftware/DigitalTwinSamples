@@ -1,0 +1,1 @@
+Sample projects for the ScaleOut Digital Twin Builder&trade; Software Toolkit.
