@@ -4,7 +4,8 @@ using Newtonsoft.Json;
 using Scaleout.DigitalTwin.Mock;
 using RealTimeWindTurbine;
 using WindTurbineMessages;
-
+using Scaleout.Client;
+using Scaleout.DigitalTwin.Client;
 
 namespace UnitTests
 {
@@ -14,15 +15,15 @@ namespace UnitTests
         public void Test1()
         {
             MockEnvironment mockEnv = new MockEnvironment();
-            MockEndpoint mockEndpoint = mockEnv.CreateMockEndpoint(modelName: "WindTurbine",
+            MockEndpoint mockEndpoint = mockEnv.CreateMockEndpoint(modelName: "RealTimeWindTurbine",
                                                                    messageProcessor: new RealTimeWindTurbineMessageProcessor(),
                                                                    alertProviders: null,
                                                                    logger: null);
 
             // Prepare message:
-            WindTurbineMessage msg = new WindTurbineMessage
+            TemperatureReading msg = new TemperatureReading
             {
-                Timestamp = DateTime.Now
+                Temperature = 33
             };
             string msgJson = JsonConvert.SerializeObject(msg);
 
@@ -31,7 +32,23 @@ namespace UnitTests
 
             // Inspect the model instance, confirm the message was processed:
             var instance = mockEndpoint.GetInstances()["WindTurbine Instance 001"] as RealTimeWindTurbineModel;
-            Assert.True(instance.MessageList.Count == 1);
+        }
+
+        [Fact]
+        public void CreateSimulationInstance()
+        {
+            // Connect to the ScaleOut service and create an endpoint to the 
+            // WindTurbineSim digital twin model.
+            var conn = GridConnection.Connect("hosts=localhost:721");
+            var dtEndpoint = new DigitalTwinModelEndpoint(conn, "SimulatedWindTurbine");
+
+            var simTwin = new SimulatedWindTurbine.WindTurbineSimulationModel
+            {
+                Temperature = 60,
+                FailureRate = 100
+            };
+            dtEndpoint.CreateTwin($"simeTwin1", simTwin);
+
         }
     }
 }

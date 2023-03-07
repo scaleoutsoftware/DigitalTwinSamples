@@ -3,31 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
 using Scaleout.Streaming.DigitalTwin.Core;
 using WindTurbineMessages;
 
 
 namespace RealTimeWindTurbine
 {
-    public class RealTimeWindTurbineMessageProcessor : MessageProcessor<RealTimeWindTurbineModel, WindTurbineMessage>
+    public class RealTimeWindTurbineMessageProcessor : MessageProcessor<RealTimeWindTurbineModel, TemperatureReading>
     {
-        public override ProcessingResult ProcessMessages(ProcessingContext context, RealTimeWindTurbineModel digitalTwin, IEnumerable<WindTurbineMessage> newMessages)
+        public override ProcessingResult ProcessMessages(ProcessingContext context, RealTimeWindTurbineModel digitalTwin, IEnumerable<TemperatureReading> newMessages)
         {
             try
             {
                 // Process incoming messages
                 foreach (var msg in newMessages)
                 {
-                    /// ...
-                    /// Add context-aware processing logic that makes use of the state object here.
-                    /// ...
-
-                    // We can optionally send a message or alert back to a data source (e.g. IoT device):
-                    // context.SendToDataSource(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(alert)));
-
-                    // Store the incoming message for later historical analysis in the model instance.
-                    digitalTwin.MessageList.Add(msg);
+                    digitalTwin.Temperature = msg.Temperature;
+                    if (digitalTwin.Temperature > TemperatureRange.High)
+                    {
+                        // Overheating. Issue a shutdown command to the device:
+                        var cmd = new DeviceCommandMessage { CommandText = "shutdown" };
+                        string cmdJson = JsonConvert.SerializeObject(cmd);
+                        byte[] cmdBytes = Encoding.UTF8.GetBytes(cmdJson);
+                        context.SendToDataSource(cmdBytes);
+                    }
                 }
 
                 // Use the embedded logger to log messages.
@@ -45,9 +45,7 @@ namespace RealTimeWindTurbine
                 digitalTwin.Id, ex.Message));
             }
 
-            // Return ProcessingResult.DoUpdate if this method modified the state of this digital twin instance 
-            // to persist the changes back to ScaleOut StreamServer;
-            // otherwise, if no changes occurred or the changes are to be discarded, return ProcessingResult.NoUpdate.
+            // Return ProcessingResult.DoUpdate since this method modified the state of the digitalTwin instance.
             return ProcessingResult.DoUpdate;
         }
     }

@@ -11,7 +11,7 @@ namespace SimulatedWindTurbine
             {
                 DebugHelper.StartIG(igName: "__SimulatedWindTurbine_IG",
                                     startupParam: null,
-                                    startupSignalPort: 45845,
+                                    startupSignalPort: 45846,
                                     devConnectionString: "bootstrapGateways=localhost:721;ignoreKeyAppId=true");
             }
 
