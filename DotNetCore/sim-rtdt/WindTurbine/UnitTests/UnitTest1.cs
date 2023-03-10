@@ -6,6 +6,8 @@ using RealTimeWindTurbine;
 using WindTurbineMessages;
 using Scaleout.Client;
 using Scaleout.DigitalTwin.Client;
+using SimulatedWindTurbine;
+using Scaleout.Streaming.DigitalTwin.Core;
 
 namespace UnitTests
 {
@@ -42,13 +44,16 @@ namespace UnitTests
             var conn = GridConnection.Connect("hosts=localhost:721");
             var dtEndpoint = new DigitalTwinModelEndpoint(conn, "SimulatedWindTurbine");
 
+            // Create a new simulation instance in the ScaleOut service with specified state.
             var simTwin = new SimulatedWindTurbine.WindTurbineSimulationModel
             {
                 Temperature = 60,
                 FailureRate = 100
             };
-            dtEndpoint.CreateTwin($"simeTwin1", simTwin);
-
+            var sendRes = dtEndpoint.CreateTwin($"simTwin1", simTwin);
+            Assert.Equal(SendingResult.Handled, sendRes);
         }
+
+
     }
 }

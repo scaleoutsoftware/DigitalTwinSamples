@@ -17,10 +17,10 @@ namespace SimulatedWindTurbine
     {
         /// <summary>
         /// Get's the simulated temperature at this time interval. Call
-        /// <see cref="NextState"/> to move this instance to the next time
+        /// <see cref="AdvanceToNextState"/> to move this instance to the next time
         /// interval.
         /// </summary>
-        public int Temperature { get; set; } = TemperatureRange.NormalOperation;
+        public int Temperature { get; set; } = TemperatureRange.NormalOperationMin;
 
         public TurbineState State { get; set; } = TurbineState.Running;
 
@@ -36,7 +36,7 @@ namespace SimulatedWindTurbine
         /// <summary>
         /// Moves that state of the simulation instance to its next time slice.
         /// </summary>
-        public void NextState()
+        public void AdvanceToNextState()
         {
             switch (State)
             {
@@ -45,19 +45,19 @@ namespace SimulatedWindTurbine
                     {
                         // Transition to Overheating state.
                         State = TurbineState.Overheating;
-                        Temperature = _rand.Next(TemperatureRange.High, TemperatureRange.MaxHigh);
+                        Temperature = _rand.Next(TemperatureRange.NormalOperationMax, TemperatureRange.OverheatMax);
                     }
                     else
                     {
-                        Temperature = _rand.Next(TemperatureRange.NormalOperation, TemperatureRange.High);
+                        Temperature = _rand.Next(TemperatureRange.NormalOperationMin, TemperatureRange.NormalOperationMax);
                     }
                     break;
                 case TurbineState.Overheating:
                     // Continue overheating.
-                    Temperature = _rand.Next(TemperatureRange.High, TemperatureRange.MaxHigh);
+                    Temperature = _rand.Next(TemperatureRange.NormalOperationMax, TemperatureRange.OverheatMax);
                     break;
                 case TurbineState.Idle:
-                    Temperature = TemperatureRange.NormalOperation;
+                    Temperature = TemperatureRange.Idle;
                     break;
                 default:
                     throw new NotSupportedException($"Unexpected turbine state {State}.");

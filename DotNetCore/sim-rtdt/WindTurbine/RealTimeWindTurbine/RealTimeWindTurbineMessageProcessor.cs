@@ -20,7 +20,7 @@ namespace RealTimeWindTurbine
                 foreach (var msg in newMessages)
                 {
                     digitalTwin.Temperature = msg.Temperature;
-                    if (digitalTwin.Temperature > TemperatureRange.High)
+                    if (digitalTwin.Temperature > TemperatureRange.NormalOperationMax)
                     {
                         // Overheating. Issue a shutdown command to the device:
                         var cmd = new DeviceCommandMessage { CommandText = "shutdown" };

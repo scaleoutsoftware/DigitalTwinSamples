@@ -9,10 +9,22 @@ using Newtonsoft.Json;
 
 namespace SimulatedWindTurbine
 {
+    /// <summary>
+    /// Handles messages sent from the real-time digital twin. 
+    /// </summary>
+    /// <remarks>
+    /// Messages sent here originate from ProcessingContext.SendToDataSource() calls made
+    /// in the RealTimeWindTurbineMessageProcessor. The WindTurbineSimulationModel
+    /// in this SimulatedWindTurbine project is simulating a data source (a real-world device),
+    /// so when a real-time model sends a message back to its data source during a simulation run, 
+    /// the message arrives here.
+    /// </remarks>
     public class WindTurbineSimulationMessageProcessor : MessageProcessor<WindTurbineSimulationModel, DeviceCommandMessage>
     {
         public override ProcessingResult ProcessMessages(ProcessingContext context, WindTurbineSimulationModel digitalTwin, IEnumerable<DeviceCommandMessage> newMessages)
         {
+            ProcessingResult result = ProcessingResult.NoUpdate;
+
             try
             {
                 // Process incoming messages
@@ -22,6 +34,13 @@ namespace SimulatedWindTurbine
                     {
                         case "shutdown":
                             digitalTwin.State = TurbineState.Idle;
+                            // We've modified the digital twin instance, so return DoUpdate to save its state in the 
+                            // ScaleOut service.
+                            result = ProcessingResult.DoUpdate;
+                            break;
+                        case "start":
+                            digitalTwin.State = TurbineState.Running;
+                            result = ProcessingResult.DoUpdate;
                             break;
                         default:
                             context.LogMessage(LogSeverity.Error,
@@ -38,15 +57,12 @@ namespace SimulatedWindTurbine
             catch (Exception ex)
             {
                 // Catch all exceptions and log them using the embedded logger.
-                // If the ScaleOut Digital Twin Streaming Service is used to host real-time digital twins, 
-                // you can see both trace messages and logged exceptions on the Manage Digital Twin Model page.
                 context.LogMessage(LogSeverity.Error,
                        string.Format("Exception occurred while processing new messages for the real-time digital twin object '{0}'. Details: {1}",
                        digitalTwin.Id, ex.Message));
             }
 
-            // Return ProcessingResult.DoUpdate since this method modified the state of the digitalTwin instance.
-            return ProcessingResult.DoUpdate;
+            return result;
         }
     }
 }
