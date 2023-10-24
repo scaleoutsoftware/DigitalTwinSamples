@@ -1,0 +1,90 @@
+{
+  "ModelName": "TestModelSim",
+  "LanguageVersion": "2",
+  "InstanceProperties": [
+    {
+      "Name": "Id",
+      "Type": 2,
+      "InitialValue": null
+    },
+    {
+      "Name": "Model",
+      "Type": 2,
+      "InitialValue": "TestModelSim"
+    },
+    {
+      "Name": "Counter",
+      "Type": 1,
+      "InitialValue": "0"
+    },
+    {
+      "Name": "Timestep",
+      "Type": 1,
+      "InitialValue": "1000"
+    }
+  ],
+  "MessageProperties": {
+    "Incoming": [
+      {
+        "Name": "Id",
+        "Type": 2,
+        "InitialValue": null
+      },
+      {
+        "Name": "Model",
+        "Type": 2,
+        "InitialValue": null
+      }
+    ]
+  },
+  "MessageRules": [
+    {
+      "Name": "PROCESS MSG TO SOURCE",
+      "Text": "DO LOG_MESSAGE(2, Incoming.Model)",
+      "Type": 0
+    }
+  ],
+  "SimulationRules": [
+    {
+      "Name": "INCREASE COUNTER",
+      "Text": "DO Counter = Counter + 1",
+      "Type": 2
+    },
+    {
+      "Name": "DELAY",
+      "Text": "DO DELAY(Timestep)",
+      "Type": 2
+    },
+    {
+      "Name": "EMIT TELEMETRY",
+      "Text": "IF (Counter = 2) THEN EMIT_TELEMETRY(\"TestModelRT\", \"Telemetry\")",
+      "Type": 2
+    },
+    {
+      "Name": "REMOVE RT INSTANCE",
+      "Text": "IF (Counter = 20) THEN DELETE_INSTANCE(\"TestModelRT\", Id)",
+      "Type": 2
+    },
+    {
+      "Name": "REMOVE THIS INSTANCE",
+      "Text": "IF (Counter  = 22) THEN DELETE_THIS_INSTANCE()",
+      "Type": 2
+    }
+  ],
+  "Timers": [],
+  "EventListDefinitions": [],
+  "AlertProviders": [],
+  "DataCollectionDefinitions": [
+    {
+      "Name": "Telemetry",
+      "PropertiesToTrack": [
+        "Counter"
+      ]
+    }
+  ],
+  "PropertyAnomalyDetectionDefinitions": [],
+  "DataCollectionAnomalyDetectionDefinitions": [],
+  "EnablePersistence": false,
+  "PersistenceProviderName": "Default",
+  "AzureDigitalTwinModelName": null
+}

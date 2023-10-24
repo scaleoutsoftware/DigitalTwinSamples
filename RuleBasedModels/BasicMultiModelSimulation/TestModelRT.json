@@ -1,0 +1,50 @@
+{
+  "ModelName": "TestModelRT",
+  "LanguageVersion": "2",
+  "InstanceProperties": [
+    {
+      "Name": "Id",
+      "Type": 2,
+      "InitialValue": null
+    },
+    {
+      "Name": "Model",
+      "Type": 2,
+      "InitialValue": "TestModelRT"
+    }
+  ],
+  "MessageProperties": {
+    "Incoming": [
+      {
+        "Name": "Counter",
+        "Type": 1,
+        "InitialValue": null
+      }
+    ]
+  },
+  "MessageRules": [
+    {
+      "Name": "PROCESS MESSAGE",
+      "Text": "IF (MODULO(Incoming.Counter, 2) = 0) \r\nTHEN LOG_MESSAGE(1, \"Received\")\r\nAND SEND_TO_DATASOURCE(\"ToDataSource\")",
+      "Type": 0
+    }
+  ],
+  "SimulationRules": [],
+  "Timers": [],
+  "EventListDefinitions": [],
+  "AlertProviders": [],
+  "DataCollectionDefinitions": [
+    {
+      "Name": "ToDataSource",
+      "PropertiesToTrack": [
+        "Id",
+        "Model"
+      ]
+    }
+  ],
+  "PropertyAnomalyDetectionDefinitions": [],
+  "DataCollectionAnomalyDetectionDefinitions": [],
+  "EnablePersistence": false,
+  "PersistenceProviderName": "Default",
+  "AzureDigitalTwinModelName": null
+}
