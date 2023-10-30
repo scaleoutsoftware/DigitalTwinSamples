@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "SimulatedSimulatedWindTurbine": {
+      "commandName": "Project",
+      "commandLineArgs": "--debug",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
