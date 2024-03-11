@@ -1,0 +1,38 @@
+{
+	"propertyNames": [
+		"Longitude",
+		"Latitude"
+	],
+	"modelName": "StatusTracker",
+	"rowLimit": 1000,
+	"continuous": true,
+	"resultsType": "map",
+	"where": [
+		{
+			"clause": [
+				{
+					"property": "alert_level",
+					"comparisonOperator": ">=",
+					"value": "1",
+					"booleanOperator": ""
+				},
+				{
+					"property": "node_type",
+					"comparisonOperator": "=",
+					"value": "infrastructure",
+					"booleanOperator": "And"
+				},
+				{
+					"property": "alert_level",
+					"comparisonOperator": "<",
+					"value": "4",
+					"booleanOperator": "And"
+				}
+			],
+			"booleanOperator": ""
+		}
+	],
+	"queryName": "InfrastructureMinor",
+	"iconShape": "Square",
+	"iconColor": "Yellow"
+}

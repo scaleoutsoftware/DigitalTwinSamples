@@ -1,0 +1,7 @@
+{
+    "assemblyName": "",
+    "modelType": "com.scaleoutsoftware.demo.realtime.StatusTracker",
+    "messageProcessorType": "com.scaleoutsoftware.demo.realtime.StatusTrackerMessageProcessor",
+    "messageType": "com.scaleoutsoftware.demo.realtime.StatusTrackerMessage",
+	"enablePersistence": true
+}

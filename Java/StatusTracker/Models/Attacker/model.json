@@ -1,0 +1,7 @@
+{
+    "assemblyName": "",
+    "modelType": "com.scaleoutsoftware.demo.inducer.Attacker",
+    "messageProcessorType": "com.scaleoutsoftware.demo.inducer.AttackerMessageProcessor",
+    "messageType": "com.scaleoutsoftware.demo.inducer.AttackerMessage",
+	"enablePersistence": false
+}

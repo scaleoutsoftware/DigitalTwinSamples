@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2023 by ScaleOut Software, Inc.
+ * (C) Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,24 +23,16 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.sample;
+package com.scaleoutsoftware.demo.realtime;
 
-import com.scaleoutsoftware.digitaltwin.core.MessageProcessor;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
+import java.io.Serializable;
 
-public class RealTimeThermostatMessageProcessor extends MessageProcessor<RealTimeThermostat, TemperatureChangeMessage> {
-    static final int HIGH_TEMPERATURE = 80;
-    @Override
-    public ProcessingResult processMessages(ProcessingContext processingContext, RealTimeThermostat thermostat, Iterable<TemperatureChangeMessage> messages) throws Exception {
+public class IncidentReport implements Serializable {
+    public long timestamp;
+    public String incidentType;
 
-        // apply the updates from the messages
-        for(TemperatureChangeMessage message : messages) {
-            thermostat.incrementTemperature(message.getTemperatureChange());
-        }
-        if(thermostat.getTemperature() > HIGH_TEMPERATURE) {
-            processingContext.sendToDataSource(new TemperatureChangeMessage(thermostat.getTemperature()));
-        }
-        return ProcessingResult.UpdateDigitalTwin;
+    public IncidentReport(long ts, String type) {
+        timestamp = ts;
+        incidentType = type;
     }
 }

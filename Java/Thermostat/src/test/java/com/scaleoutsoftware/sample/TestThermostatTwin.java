@@ -37,19 +37,17 @@ import java.util.HashMap;
 
 public class TestThermostatTwin {
     @Test
-    public void testThermostatTwin() throws WorkbenchException {
-        Workbench workbench = new Workbench();
-        workbench.addRealTimeModel("Thermostat", new RealTimeThermostatMessageProcessor(), RealTimeThermostat.class, TemperatureChangeMessage.class);
-        workbench.addSimulationModel("SimHeater", new HeaterMessageProcessor(), new HeaterSimulationProcessor(), SimulatedHeater.class, TemperatureChangeMessage.class);
-        workbench.addInstance("SimHeater", "19", new SimulatedHeater(true));
-        workbench.addInstance("Thermostat", "19", new RealTimeThermostat());
-        SimulationStep step = workbench.initializeSimulation(System.currentTimeMillis(), System.currentTimeMillis()+60000, 1000);
-        while(step.getStatus() == SimulationStatus.Running) {
-            step = workbench.step();
-            HashMap<String, DigitalTwinBase> realTimeTheermostats = workbench.getInstances("Thermostat");
-            RealTimeThermostat thermostat = (RealTimeThermostat) realTimeTheermostats.get("19");
-            System.out.println("rtThermostat: " + thermostat.getTemperature());
+    public void testThermostatTwin() throws Exception {
+        try (Workbench workbench = new Workbench()) {
+            workbench.addRealTimeModel("Thermostat", new RealTimeThermostatMessageProcessor(), RealTimeThermostat.class, TemperatureChangeMessage.class);
+            workbench.addSimulationModel("SimHeater", new HeaterMessageProcessor(), new HeaterSimulationProcessor(), SimulatedHeater.class, TemperatureChangeMessage.class);
+            workbench.addInstance("SimHeater", "19", new SimulatedHeater());
+            workbench.addInstance("Thermostat", "19", new RealTimeThermostat());
+            SimulationStep step = workbench.initializeSimulation(System.currentTimeMillis(), System.currentTimeMillis() + 60000, 1000);
+            while (step.getStatus() == SimulationStatus.Running) {
+                step = workbench.step();
+            }
+            workbench.generateModelSchema("Thermostat", "C:\\Users\\brandonr\\Desktop");
         }
-        workbench.generateModelSchema("Thermostat", "C:\\Users\\brandonr\\Desktop");
     }
 }
