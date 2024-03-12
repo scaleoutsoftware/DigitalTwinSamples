@@ -25,37 +25,21 @@
  */
 package com.scaleoutsoftware.demo.inducer;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import com.scaleoutsoftware.digitaltwin.datasource.AppEndpoint;
+import com.scaleoutsoftware.digitaltwin.datasource.AppEndpointException;
 
-public class AttackerMessage {
-    List<String> ids = new LinkedList<>();
-    public AttackerMessage() {}
-    public AttackerMessage(String ... attackIds) {
-        ids.addAll(Arrays.asList(attackIds));
-    }
-
-    private String idsToJsonList() {
-        StringBuilder builder = new StringBuilder();
-        Iterator<String> iterator = ids.iterator();
-        while(iterator.hasNext()) {
-            String id = iterator.next();
-            builder.append("\"");
-            builder.append(id);
-            builder.append("\"");
-            if(iterator.hasNext()) {
-                builder.append(",");
-            }
+public class AttackMain {
+    public static String ATTACKER_MODEL = "Attacker";
+    public static String ATTACKER_ID = "19";
+    public static String[] CONSTANT_IDS = new String[] {"98072","98073","98074","98075","98082","98367","10122","10124","10125","10131","10132","10133","33109","33102","33101","33110","33111","33114"};
+    public static void main(String[] args) throws AppEndpointException {
+        if (args.length == 0) {
+            args = CONSTANT_IDS;
         }
-        return builder.toString();
+        AttackerMessage message = new AttackerMessage(args);
+        String json = message.toJson();
+        System.out.println("json: " + json);
+        AppEndpoint.send(ATTACKER_MODEL, ATTACKER_ID, json);
     }
-
-
-    public String toJson() {
-        return String.format("{\"ids\":[%s]}", idsToJsonList());
-    }
-
 
 }
