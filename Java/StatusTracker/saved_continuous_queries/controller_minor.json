@@ -1,0 +1,38 @@
+{
+	"propertyNames": [
+		"Longitude",
+		"Latitude"
+	],
+	"modelName": "StatusTracker",
+	"rowLimit": 1000,
+	"continuous": true,
+	"resultsType": "map",
+	"where": [
+		{
+			"clause": [
+				{
+					"property": "alert_level",
+					"comparisonOperator": ">=",
+					"value": "2",
+					"booleanOperator": ""
+				},
+				{
+					"property": "node_type",
+					"comparisonOperator": "=",
+					"value": "controller",
+					"booleanOperator": "And"
+				},
+				{
+					"property": "alert_level",
+					"comparisonOperator": "<",
+					"value": "8",
+					"booleanOperator": "And"
+				}
+			],
+			"booleanOperator": ""
+		}
+	],
+	"queryName": "ControllerMinor",
+	"iconShape": "Square",
+	"iconColor": "Yellow"
+}

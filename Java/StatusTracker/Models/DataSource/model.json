@@ -1,0 +1,8 @@
+{
+    "assemblyName": "",
+    "modelType": "com.scaleoutsoftware.demo.simulation.DataSource",
+    "messageProcessorType": "com.scaleoutsoftware.demo.simulation.DataSourceMessageProcessor",
+	"simulationProcessorType": "com.scaleoutsoftware.demo.simulation.DataSourceSimulationProcessor",
+    "messageType": "com.scaleoutsoftware.demo.simulation.DataSourceMessage",
+	"enableSimulationSupport":true
+}

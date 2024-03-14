@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2023 by ScaleOut Software, Inc.
+ * (C) Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,24 +23,52 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.sample;
+package com.scaleoutsoftware.demo.simulation;
 
-import com.scaleoutsoftware.digitaltwin.core.MessageProcessor;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
+public class DataSourceMessage {
+    private String nodeType;
+    private String status;
+    private String region;
+    private double longitude;
+    private double latitude;
+    private boolean attacked;
 
-public class RealTimeThermostatMessageProcessor extends MessageProcessor<RealTimeThermostat, TemperatureChangeMessage> {
-    static final int HIGH_TEMPERATURE = 80;
-    @Override
-    public ProcessingResult processMessages(ProcessingContext processingContext, RealTimeThermostat thermostat, Iterable<TemperatureChangeMessage> messages) throws Exception {
+    public DataSourceMessage() {
+    }
 
-        // apply the updates from the messages
-        for(TemperatureChangeMessage message : messages) {
-            thermostat.incrementTemperature(message.getTemperatureChange());
-        }
-        if(thermostat.getTemperature() > HIGH_TEMPERATURE) {
-            processingContext.sendToDataSource(new TemperatureChangeMessage(thermostat.getTemperature()));
-        }
-        return ProcessingResult.UpdateDigitalTwin;
+    public DataSourceMessage(boolean atk) {
+        attacked = atk;
+    }
+
+    public DataSourceMessage(String nt, String st, String r, double lo, double la) {
+        nodeType   = nt;
+        status     = st;
+        region     = r;
+        longitude  = lo;
+        latitude   = la;
+    }
+
+    public boolean attack() {
+        return attacked;
+    }
+
+    public String getNodeType() {
+        return nodeType;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

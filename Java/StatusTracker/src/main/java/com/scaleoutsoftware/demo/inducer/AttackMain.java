@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2023 by ScaleOut Software, Inc.
+ * (C) Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,24 +23,23 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.sample;
+package com.scaleoutsoftware.demo.inducer;
 
-import com.scaleoutsoftware.digitaltwin.core.MessageProcessor;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
+import com.scaleoutsoftware.digitaltwin.datasource.AppEndpoint;
+import com.scaleoutsoftware.digitaltwin.datasource.AppEndpointException;
 
-public class RealTimeThermostatMessageProcessor extends MessageProcessor<RealTimeThermostat, TemperatureChangeMessage> {
-    static final int HIGH_TEMPERATURE = 80;
-    @Override
-    public ProcessingResult processMessages(ProcessingContext processingContext, RealTimeThermostat thermostat, Iterable<TemperatureChangeMessage> messages) throws Exception {
-
-        // apply the updates from the messages
-        for(TemperatureChangeMessage message : messages) {
-            thermostat.incrementTemperature(message.getTemperatureChange());
+public class AttackMain {
+    public static String ATTACKER_MODEL = "Attacker";
+    public static String ATTACKER_ID = "19";
+    public static String[] CONSTANT_IDS = new String[] {"98072","98073","98074","98075","98082","98367","10122","10124","10125","10131","10132","10133","33109","33102","33101","33110","33111","33114"};
+    public static void main(String[] args) throws AppEndpointException {
+        if (args.length == 0) {
+            args = CONSTANT_IDS;
         }
-        if(thermostat.getTemperature() > HIGH_TEMPERATURE) {
-            processingContext.sendToDataSource(new TemperatureChangeMessage(thermostat.getTemperature()));
-        }
-        return ProcessingResult.UpdateDigitalTwin;
+        AttackerMessage message = new AttackerMessage(args);
+        String json = message.toJson();
+        System.out.println("json: " + json);
+        AppEndpoint.send(ATTACKER_MODEL, ATTACKER_ID, json);
     }
+
 }

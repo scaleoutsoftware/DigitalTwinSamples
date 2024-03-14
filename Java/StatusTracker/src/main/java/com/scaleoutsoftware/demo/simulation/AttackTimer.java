@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2023 by ScaleOut Software, Inc.
+ * (C) Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,32 +23,19 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.sample;
+package com.scaleoutsoftware.demo.simulation;
 
 import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
 import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
-import com.scaleoutsoftware.digitaltwin.core.SimulationController;
-import com.scaleoutsoftware.digitaltwin.core.SimulationProcessor;
+import com.scaleoutsoftware.digitaltwin.core.TimerHandler;
 
-import java.time.Duration;
-import java.util.Date;
-import java.util.Random;
+import java.util.logging.Level;
 
-public class HeaterSimulationProcessor extends SimulationProcessor<SimulatedHeater> {
-    public ProcessingResult processModel(ProcessingContext processingContext, SimulatedHeater heater, Date date) {
-        SimulationController controller = processingContext.getSimulationController();
-        if(heater.isShutdown()) {
-            controller.deleteThisInstance();
-        } else if(heater.increaseTemperature()) {
-            Random random = new Random();
-            int change = random.nextInt(3);
-            controller.emitTelemetry("Thermostat", new TemperatureChangeMessage(change));
-            heater.setIncreaseTemperature(false);
-            controller.delay(Duration.ofMillis(SimulatedHeater.HEATER_ACTIVE_DELAY_MS));
-        } else if (!heater.increaseTemperature()) {
-            heater.setIncreaseTemperature(true);
-            controller.delay(Duration.ofMillis(SimulatedHeater.HEATER_INACTIVE_DELAY_MS));
-        }
+public class AttackTimer implements TimerHandler<DataSource> {
+    @Override
+    public ProcessingResult onTimedMessage(String timerName, DataSource dataSource, ProcessingContext processingContext) {
+        processingContext.logMessage(Level.INFO, String.format("DataSource (%s) was attacked!", processingContext.getDataSourceId()));
+        dataSource.setAttacked(true);
         return ProcessingResult.UpdateDigitalTwin;
     }
 }

@@ -1,0 +1,32 @@
+{
+	"propertyNames": [
+		"Longitude",
+		"Latitude"
+	],
+	"modelName": "StatusTracker",
+	"rowLimit": 1000,
+	"continuous": true,
+	"resultsType": "map",
+	"where": [
+		{
+			"clause": [
+				{
+					"property": "alert_level",
+					"comparisonOperator": "=",
+					"value": "10",
+					"booleanOperator": ""
+				},
+				{
+					"property": "node_type",
+					"comparisonOperator": "=",
+					"value": "infrastructure",
+					"booleanOperator": "And"
+				}
+			],
+			"booleanOperator": ""
+		}
+	],
+	"queryName": "InfrastructureAttacked",
+	"iconShape": "Star",
+	"iconColor": "Red"
+}

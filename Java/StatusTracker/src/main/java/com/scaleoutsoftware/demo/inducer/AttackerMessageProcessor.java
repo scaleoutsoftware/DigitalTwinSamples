@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2023 by ScaleOut Software, Inc.
+ * (C) Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,31 +23,29 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.sample;
+package com.scaleoutsoftware.demo.inducer;
 
+import com.scaleoutsoftware.demo.Constants;
+import com.scaleoutsoftware.demo.realtime.StatusTrackerMessage;
+import com.scaleoutsoftware.demo.realtime.StatusTrackerMessageBuilder;
+import com.scaleoutsoftware.demo.simulation.DataSourceMessage;
+import com.scaleoutsoftware.digitaltwin.core.MessageProcessor;
 import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
 import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
-import com.scaleoutsoftware.digitaltwin.core.SimulationController;
-import com.scaleoutsoftware.digitaltwin.core.SimulationProcessor;
 
-import java.time.Duration;
-import java.util.Date;
-import java.util.Random;
-
-public class HeaterSimulationProcessor extends SimulationProcessor<SimulatedHeater> {
-    public ProcessingResult processModel(ProcessingContext processingContext, SimulatedHeater heater, Date date) {
-        SimulationController controller = processingContext.getSimulationController();
-        if(heater.isShutdown()) {
-            controller.deleteThisInstance();
-        } else if(heater.increaseTemperature()) {
-            Random random = new Random();
-            int change = random.nextInt(3);
-            controller.emitTelemetry("Thermostat", new TemperatureChangeMessage(change));
-            heater.setIncreaseTemperature(false);
-            controller.delay(Duration.ofMillis(SimulatedHeater.HEATER_ACTIVE_DELAY_MS));
-        } else if (!heater.increaseTemperature()) {
-            heater.setIncreaseTemperature(true);
-            controller.delay(Duration.ofMillis(SimulatedHeater.HEATER_INACTIVE_DELAY_MS));
+public class AttackerMessageProcessor extends MessageProcessor<Attacker,AttackerMessage> {
+    @Override
+    public ProcessingResult processMessages(ProcessingContext processingContext, Attacker attacker, Iterable<AttackerMessage> messages) throws Exception {
+        for(AttackerMessage msg : messages) {
+            for(String id : msg.ids) {
+                StatusTrackerMessage statusTrackerMessage = new StatusTrackerMessageBuilder(processingContext.getDataSourceId())
+                        .setMessageType(Constants.MESSAGE_TYPE_STATUS)
+                        .setNodeCondition(Constants.NODE_CONDITION_SEVERE)
+                        .build();
+                processingContext.sendToDigitalTwin("StatusTracker", id, statusTrackerMessage);
+                DataSourceMessage dataSourceMessage = new DataSourceMessage(true);
+                processingContext.sendToDigitalTwin("DataSource", id, dataSourceMessage);
+            }
         }
         return ProcessingResult.UpdateDigitalTwin;
     }

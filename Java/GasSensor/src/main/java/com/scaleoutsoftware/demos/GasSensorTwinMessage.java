@@ -1,5 +1,5 @@
-/*
- * (C) Copyright 2023 by ScaleOut Software, Inc.
+/**
+ * © Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -13,7 +13,7 @@
  *
  * All Sample Code contained herein is provided to you "AS IS" without
  * any warranties of any kind. THE IMPLIED WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGMENT ARE EXPRESSLY
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE EXPRESSLY
  * DISCLAIMED.  SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED
  * WARRANTIES, SO THE ABOVE EXCLUSIONS MAY NOT APPLY TO YOU.  IN NO
  * EVENT WILL SSI BE LIABLE TO ANY PARTY FOR ANY DIRECT, INDIRECT,
@@ -23,24 +23,26 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.sample;
+package com.scaleoutsoftware.demos;
 
-import com.scaleoutsoftware.digitaltwin.core.MessageProcessor;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
+import com.google.gson.annotations.SerializedName;
 
-public class RealTimeThermostatMessageProcessor extends MessageProcessor<RealTimeThermostat, TemperatureChangeMessage> {
-    static final int HIGH_TEMPERATURE = 80;
-    @Override
-    public ProcessingResult processMessages(ProcessingContext processingContext, RealTimeThermostat thermostat, Iterable<TemperatureChangeMessage> messages) throws Exception {
+public class GasSensorTwinMessage {
+    @SerializedName("PPMReading")
+    private int	    _ppmReading;
+    @SerializedName("Timestamp")
+    private long    _timestamp;
 
-        // apply the updates from the messages
-        for(TemperatureChangeMessage message : messages) {
-            thermostat.incrementTemperature(message.getTemperatureChange());
-        }
-        if(thermostat.getTemperature() > HIGH_TEMPERATURE) {
-            processingContext.sendToDataSource(new TemperatureChangeMessage(thermostat.getTemperature()));
-        }
-        return ProcessingResult.UpdateDigitalTwin;
+    public GasSensorTwinMessage(int reading, long time) {
+        _ppmReading = reading;
+        _timestamp = time;
+    }
+
+    public int getPpmReading() {
+        return _ppmReading;
+    }
+
+    public long getTimestamp() {
+        return _timestamp;
     }
 }

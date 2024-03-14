@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2023 by ScaleOut Software, Inc.
+ * (C) Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,24 +23,39 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.sample;
+package com.scaleoutsoftware.demo.inducer;
 
-import com.scaleoutsoftware.digitaltwin.core.MessageProcessor;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-public class RealTimeThermostatMessageProcessor extends MessageProcessor<RealTimeThermostat, TemperatureChangeMessage> {
-    static final int HIGH_TEMPERATURE = 80;
-    @Override
-    public ProcessingResult processMessages(ProcessingContext processingContext, RealTimeThermostat thermostat, Iterable<TemperatureChangeMessage> messages) throws Exception {
-
-        // apply the updates from the messages
-        for(TemperatureChangeMessage message : messages) {
-            thermostat.incrementTemperature(message.getTemperatureChange());
-        }
-        if(thermostat.getTemperature() > HIGH_TEMPERATURE) {
-            processingContext.sendToDataSource(new TemperatureChangeMessage(thermostat.getTemperature()));
-        }
-        return ProcessingResult.UpdateDigitalTwin;
+public class AttackerMessage {
+    List<String> ids = new LinkedList<>();
+    public AttackerMessage() {}
+    public AttackerMessage(String ... attackIds) {
+        ids.addAll(Arrays.asList(attackIds));
     }
+
+    private String idsToJsonList() {
+        StringBuilder builder = new StringBuilder();
+        Iterator<String> iterator = ids.iterator();
+        while(iterator.hasNext()) {
+            String id = iterator.next();
+            builder.append("\"");
+            builder.append(id);
+            builder.append("\"");
+            if(iterator.hasNext()) {
+                builder.append(",");
+            }
+        }
+        return builder.toString();
+    }
+
+
+    public String toJson() {
+        return String.format("{\"ids\":[%s]}", idsToJsonList());
+    }
+
+
 }
