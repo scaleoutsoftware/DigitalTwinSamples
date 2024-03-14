@@ -32,36 +32,35 @@ import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
 
 import java.nio.charset.StandardCharsets;
 
-public class GasSensorMessageProcessor extends MessageProcessor<GasSensor, GasSensorMessage> {
+public class GasSensorTwinMessageProcessor extends MessageProcessor<GasSensorTwin, GasSensorTwinMessage> {
     @Override
     public ProcessingResult processMessages(ProcessingContext processingContext,
-                                            GasSensor gasSensor,
-                                            Iterable<GasSensorMessage> messages) throws Exception {
-        for (GasSensorMessage msg : messages)
+                                            GasSensorTwin gasSensor,
+                                            Iterable<GasSensorTwinMessage> messages) throws Exception {
+        for (GasSensorTwinMessage msg : messages)
         {
             gasSensor.setLastPpmReading(msg.getPpmReading());
             gasSensor.setLastPpmTime(msg.getTimestamp());
 
-            if (msg.getPpmReading() > GasSensor.MAX_READING_ALLOWED_PPM) // handles 50+
+            if (msg.getPpmReading() > GasSensorTwin.MAX_READING_ALLOWED_PPM) // handles 50+
             {
                 if (!gasSensor.isLimitExceeded())
                 {
                     gasSensor.setLimitExceeded(true);
                     gasSensor.setLimitStartTime(msg.getTimestamp());
-                    gasSensor.incrementNumEvents();
                 }
-                if ((gasSensor.getLastPpmTime() - gasSensor.getLimitStartTime()) > GasSensor.MAX_READING_ALLOWED_LIMIT_TIME_SECS ||
-                        gasSensor.getLastPpmReading() >= GasSensor.MAX_PPM_READING_SPIKE)
+                if (((gasSensor.getLastPpmTime() - gasSensor.getLimitStartTime())/1000) > GasSensorTwin.MAX_READING_ALLOWED_LIMIT_TIME_SECS ||
+                        gasSensor.getLastPpmReading() >= GasSensorTwin.MAX_PPM_READING_SPIKE)
                 {
                     gasSensor.setAlarmSounded(true);
                     Gson gson = new Gson();
-                    GasSensorAlert alert = new GasSensorAlert("Warning: dangerous air quality.", System.currentTimeMillis());
+                    GasSensorAlert alert = new GasSensorAlert("Warning: dangerous air quality.", 100);
                     String serializedMsg = gson.toJson(alert);
                     processingContext.sendToDataSource(serializedMsg.getBytes(StandardCharsets.UTF_8));
-                    //processingContext.sendToDigitalTwin("NaturalGasMeterManager", "23", "");
                 }
             } else if(gasSensor.isLimitExceeded()) {
                 gasSensor.setLimitExceeded(false);
+                gasSensor.setAlarmSounded(false);
             }
         }
         return ProcessingResult.UpdateDigitalTwin;

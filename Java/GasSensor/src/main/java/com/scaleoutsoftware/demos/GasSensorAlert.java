@@ -25,17 +25,23 @@
  */
 package com.scaleoutsoftware.demos;
 
-public class GasSensorAlert {
-    private String alertMessage;
-    private long timestamp;
+import com.google.gson.annotations.SerializedName;
 
-    GasSensorAlert(String msg, long timestamp) {
-        alertMessage = msg;
-        this.timestamp = timestamp;
+public class GasSensorAlert {
+    @SerializedName("Description")
+    private String _description;
+    @SerializedName("Code")
+    private int _code;
+
+    GasSensorAlert(String desc, int code) {
+        _description    = desc;
+        _code           = code;
     }
 
     public String getAlertMessage() {
-        return alertMessage;
+        return _description;
     }
+
+    public int getAlertCode() { return _code; }
 
 }

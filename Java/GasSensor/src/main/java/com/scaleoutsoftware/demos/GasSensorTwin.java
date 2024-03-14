@@ -25,24 +25,32 @@
  */
 package com.scaleoutsoftware.demos;
 
+import com.google.gson.annotations.SerializedName;
 import com.scaleoutsoftware.digitaltwin.core.DigitalTwinBase;
 
-public class GasSensor extends DigitalTwinBase {
+public class GasSensorTwin extends DigitalTwinBase {
     // static constants
     public static final int MAX_READING_ALLOWED_PPM = 50;
-    public static final int MAX_READING_ALLOWED_LIMIT_TIME_SECS = 30000;
+    public static final int MAX_READING_ALLOWED_LIMIT_TIME_SECS = 30;
     public static final int	MAX_PPM_READING_SPIKE = 200;
 
     // state variables
+    @SerializedName("LastPPMReading")
     private int		_lastPpmReading;
+    @SerializedName("LastPPMTime")
     private long	_lastPpmTime;
+    @SerializedName("LimitExceeded")
     private boolean	_limitExceeded = false;
-    private boolean	_alarmSounded  = false;
+    @SerializedName("AlarmSounded")
+    private int	_alarmSounded  = 0; // alerted state is 1, normal state is 0
+    @SerializedName("LimitStartTime")
     private long	_limitStartTime;
-    private int		_numEvents;
-    private double Longitude;
-    private double Latitude;
-    private String siteName;
+    @SerializedName("Site")
+    private String _site;
+    @SerializedName("Longitude")
+    private double _longitude;
+    @SerializedName("Latitude")
+    private double _latitude;
 
     public int getLastPpmReading() {
         return _lastPpmReading;
@@ -69,11 +77,11 @@ public class GasSensor extends DigitalTwinBase {
     }
 
     public boolean isAlarmSounded() {
-        return _alarmSounded;
+        return _alarmSounded == 1;
     }
 
     public void setAlarmSounded(boolean alarmSounded) {
-        _alarmSounded = alarmSounded;
+        _alarmSounded = alarmSounded ? 1 : 0;
     }
 
     public long getLimitStartTime() {
@@ -82,13 +90,5 @@ public class GasSensor extends DigitalTwinBase {
 
     public void setLimitStartTime(long limitStartTime) {
         _limitStartTime = limitStartTime;
-    }
-
-    public int getNumEvents() {
-        return _numEvents;
-    }
-
-    public void incrementNumEvents() {
-        _numEvents++;
     }
 }

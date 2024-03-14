@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TestGasSensor {
+public class TestGasSensorTwin {
     @Test
     public void test30SecondPpmLimit() {
         String modelName = "GasSensor";
@@ -43,25 +43,25 @@ public class TestGasSensor {
         long in25Seconds = startTime+25000;
         long in31Seconds = startTime+31000;
         try (Workbench workbench = new Workbench()) {
-            workbench.addRealTimeModel("GasSensor", new GasSensorMessageProcessor(), GasSensor.class, GasSensorMessage.class);
-            workbench.addInstance("GasSensor", "19", new GasSensor());
+            workbench.addRealTimeModel("GasSensor", new GasSensorTwinMessageProcessor(), GasSensorTwin.class, GasSensorTwinMessage.class);
+            workbench.addInstance("GasSensor", "19", new GasSensorTwin());
             List<Object> messages = new LinkedList<>();
-            messages.add(new GasSensorMessage(75, startTime));
+            messages.add(new GasSensorTwinMessage(75, startTime));
             workbench.send(modelName, id, messages);
             messages.clear();
-            messages.add(new GasSensorMessage(75, in25Seconds));
+            messages.add(new GasSensorTwinMessage(75, in25Seconds));
             workbench.send(modelName, id, messages);
             HashMap<String, DigitalTwinBase> instances = workbench.getInstances(modelName);
-            GasSensor sensor = (GasSensor)instances.get(id);
-            Assert.assertFalse(sensor.isAlarmSounded());
-            Assert.assertTrue(sensor.isLimitExceeded());
+            GasSensorTwin gasSensorTwin = (GasSensorTwin)instances.get(id);
+            Assert.assertFalse(gasSensorTwin.isAlarmSounded());
+            Assert.assertTrue(gasSensorTwin.isLimitExceeded());
             messages.clear();
-            messages.add(new GasSensorMessage(75, in31Seconds));
+            messages.add(new GasSensorTwinMessage(75, in31Seconds));
             workbench.send(modelName, id, messages);
             instances = workbench.getInstances(modelName);
-            sensor = (GasSensor)instances.get(id);
-            Assert.assertTrue(sensor.isLimitExceeded());
-            Assert.assertTrue(sensor.isAlarmSounded());
+            gasSensorTwin = (GasSensorTwin)instances.get(id);
+            Assert.assertTrue(gasSensorTwin.isLimitExceeded());
+            Assert.assertTrue(gasSensorTwin.isAlarmSounded());
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
@@ -73,14 +73,14 @@ public class TestGasSensor {
         String id = "19";
         long startTime = System.currentTimeMillis();
         try (Workbench workbench = new Workbench()) {
-            workbench.addRealTimeModel("GasSensor", new GasSensorMessageProcessor(), GasSensor.class, GasSensorMessage.class);
-            workbench.addInstance("GasSensor", "19", new GasSensor());
+            workbench.addRealTimeModel("GasSensor", new GasSensorTwinMessageProcessor(), GasSensorTwin.class, GasSensorTwinMessage.class);
+            workbench.addInstance("GasSensor", "19", new GasSensorTwin());
             List<Object> messages = new LinkedList<>();
-            messages.add(new GasSensorMessage(200, startTime));
+            messages.add(new GasSensorTwinMessage(200, startTime));
             workbench.send(modelName, id, messages);
             HashMap<String, DigitalTwinBase> instances = workbench.getInstances(modelName);
-            GasSensor sensor = (GasSensor)instances.get(id);
-            Assert.assertTrue(sensor.isAlarmSounded());
+            GasSensorTwin gasSensorTwin = (GasSensorTwin)instances.get(id);
+            Assert.assertTrue(gasSensorTwin.isAlarmSounded());
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }

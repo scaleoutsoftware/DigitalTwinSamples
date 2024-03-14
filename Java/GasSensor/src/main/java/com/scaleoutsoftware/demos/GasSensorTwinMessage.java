@@ -25,11 +25,15 @@
  */
 package com.scaleoutsoftware.demos;
 
-public class GasSensorMessage {
+import com.google.gson.annotations.SerializedName;
+
+public class GasSensorTwinMessage {
+    @SerializedName("PPMReading")
     private int	    _ppmReading;
+    @SerializedName("Timestamp")
     private long    _timestamp;
 
-    public GasSensorMessage(int reading, long time) {
+    public GasSensorTwinMessage(int reading, long time) {
         _ppmReading = reading;
         _timestamp = time;
     }
