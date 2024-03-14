@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>disable</Nullable>
+    <Product>ScaleOut Digital Twins™</Product>
+	<Description>ScaleOut Software sample - GasSensor messages project.</Description>
+	<Copyright>Copyright © 2024 by ScaleOut Software, Inc.</Copyright>
+	<Company>ScaleOut Software, Inc.</Company>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonSubTypes" Version="2.0.1" />
+  </ItemGroup>
+
+</Project>

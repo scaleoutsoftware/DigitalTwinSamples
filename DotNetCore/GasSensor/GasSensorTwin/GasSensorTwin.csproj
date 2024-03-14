@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>1.0.0</Version>
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+	<Nullable>disable</Nullable>
+	<Product>ScaleOut Digital Twins™</Product>
+    <Description>ScaleOut Software sample - GasSensor real-time digital twin project.</Description>
+	<Copyright>Copyright © 2024 by ScaleOut Software, Inc.</Copyright>
+	<Company>ScaleOut Software, Inc.</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scaleout.DigitalTwin.Hosting" Version="3.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Messages\Messages.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir $(ProjectDir)bin\PublishedZip&#xD;&#xA;powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(ProjectDir)bin\PublishedZip\$(ProjectName).zip' -Force" />
+  </Target>
+
+</Project>
