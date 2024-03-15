@@ -1,0 +1,5 @@
+﻿Id,AlarmSounded,LastPPMReading,LimitExceeded,Site,Latitude,Longitude
+Seattle,0,14,FALSE,Seattle,47.6061,-122.3328
+Miami,0,22,FALSE,Miami,25.7617,80.1918
+Los Angeles,0,8,FALSE,Los Angeles,34.0549,-118.2426
+New York,0,11,FALSE,New York,40.7128,-74.0060

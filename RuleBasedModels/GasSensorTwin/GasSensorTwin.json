@@ -1,0 +1,141 @@
+{
+  "ModelName": "GasSensorTwin",
+  "LanguageVersion": "2",
+  "InstanceProperties": [
+    {
+      "Name": "Id",
+      "Type": 2,
+      "InitialValue": null
+    },
+    {
+      "Name": "Model",
+      "Type": 2,
+      "InitialValue": "GasSensorTwin"
+    },
+    {
+      "Name": "LastPPMReading",
+      "Type": 1,
+      "InitialValue": null
+    },
+    {
+      "Name": "LastPPMTime",
+      "Type": 4,
+      "InitialValue": null
+    },
+    {
+      "Name": "LimitExceeded",
+      "Type": 3,
+      "InitialValue": "False"
+    },
+    {
+      "Name": "AlarmSounded",
+      "Type": 1,
+      "InitialValue": "0"
+    },
+    {
+      "Name": "LimitStartTime",
+      "Type": 4,
+      "InitialValue": "3/14/2024 11:00:00"
+    },
+    {
+      "Name": "Latitude",
+      "Type": 1,
+      "InitialValue": null
+    },
+    {
+      "Name": "Longitude",
+      "Type": 1,
+      "InitialValue": null
+    },
+    {
+      "Name": "Site",
+      "Type": 2,
+      "InitialValue": null
+    },
+    {
+      "Name": "MaxAllowedPPM",
+      "Type": 1,
+      "InitialValue": "50"
+    },
+    {
+      "Name": "SpikeAlertPPM",
+      "Type": 1,
+      "InitialValue": "200"
+    },
+    {
+      "Name": "MaxAllowedTimePeriod",
+      "Type": 1,
+      "InitialValue": "30000"
+    },
+    {
+      "Name": "Status",
+      "Type": 2,
+      "InitialValue": "Normal"
+    }
+  ],
+  "MessageProperties": {
+    "Incoming": [
+      {
+        "Name": "PPMReading",
+        "Type": 1,
+        "InitialValue": null
+      },
+      {
+        "Name": "TimeStamp",
+        "Type": 4,
+        "InitialValue": null
+      }
+    ]
+  },
+  "MessageRules": [
+    {
+      "Name": "Assign new values",
+      "Text": "DO LastPPMReading = Incoming.PPMReading\r\nAND LastPPMTime = Incoming.TimeStamp",
+      "Type": 0
+    },
+    {
+      "Name": "Normal reading",
+      "Text": "IF (Incoming.PPMReading < MaxAllowedPPM) \r\nTHEN AlarmSounded = 0\r\nAND LimitExceeded = false",
+      "Type": 0
+    },
+    {
+      "Name": "New high reading",
+      "Text": "IF (Incoming.PPMReading > MaxAllowedPPM AND LimitExceeded = false)\r\nTHEN LimitExceeded = true\r\nAND LimitStartTime = Incoming.TimeStamp",
+      "Type": 0
+    },
+    {
+      "Name": "Detect spike",
+      "Text": "IF (Incoming.PPMReading >= SpikeAlertPPM)\r\nTHEN AlarmSounded = 1\r\nAND Status = \"Spike: Shutdown the incoming gas pipe\"",
+      "Type": 0
+    },
+    {
+      "Name": "Detect prolonged exposure",
+      "Text": "IF (LimitExceeded = true AND GET_UNIX_TIME_IN_MILLISEC(LastPPMTime) - GET_UNIX_TIME_IN_MILLISEC(LimitStartTime) >= MaxAllowedTimePeriod)\r\nTHEN AlarmSounded = 1\r\nAND Status = \"Prolonged exposure: Shutdown the incoming gas pipe\"",
+      "Type": 0
+    },
+    {
+      "Name": "Send alarm to source",
+      "Text": "IF (AlarmSounded != 0) \r\nTHEN SEND_TO_DATASOURCE(\"StatusData\")",
+      "Type": 0
+    }
+  ],
+  "SimulationRules": [],
+  "Timers": [],
+  "EventListDefinitions": [],
+  "AlertProviders": [],
+  "DataCollectionDefinitions": [
+    {
+      "Name": "StatusData",
+      "PropertiesToTrack": [
+        "AlarmSounded",
+        "Status"
+      ]
+    }
+  ],
+  "PropertyAnomalyDetectionDefinitions": [],
+  "DataCollectionAnomalyDetectionDefinitions": [],
+  "EnablePersistence": false,
+  "PersistenceProviderName": "Default",
+  "EnableMessageRecording": false,
+  "AzureDigitalTwinModelName": null
+}

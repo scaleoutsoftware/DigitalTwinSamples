@@ -1,0 +1,112 @@
+{
+  "ModelName": "SimulatedGasSensor",
+  "LanguageVersion": "2",
+  "InstanceProperties": [
+    {
+      "Name": "Id",
+      "Type": 2,
+      "InitialValue": null
+    },
+    {
+      "Name": "Model",
+      "Type": 2,
+      "InitialValue": "SimulatedGasSensor"
+    },
+    {
+      "Name": "Behavior",
+      "Type": 2,
+      "InitialValue": "Normal"
+    },
+    {
+      "Name": "CounterBeforeBehavior",
+      "Type": 1,
+      "InitialValue": "6"
+    },
+    {
+      "Name": "PPMReading",
+      "Type": 1,
+      "InitialValue": "25"
+    },
+    {
+      "Name": "TimeStamp",
+      "Type": 4,
+      "InitialValue": null
+    },
+    {
+      "Name": "Counter",
+      "Type": 1,
+      "InitialValue": "0"
+    },
+    {
+      "Name": "Status",
+      "Type": 2,
+      "InitialValue": "Normal"
+    }
+  ],
+  "MessageProperties": {
+    "Incoming": [
+      {
+        "Name": "AlarmSounded",
+        "Type": 1,
+        "InitialValue": null
+      },
+      {
+        "Name": "Status",
+        "Type": 2,
+        "InitialValue": null
+      }
+    ]
+  },
+  "MessageRules": [
+    {
+      "Name": "Update Status",
+      "Text": "DO Status = Incoming.Status",
+      "Type": 0
+    }
+  ],
+  "SimulationRules": [
+    {
+      "Name": "Increase Counter and set TimeStamp",
+      "Text": "DO Counter = Counter + 1 AND TimeStamp = GET_CURRENT_TIME()",
+      "Type": 2
+    },
+    {
+      "Name": "Slow rise case",
+      "Text": "If (Counter >= CounterBeforeBehavior AND Behavior = \"SlowRise\")\r\nTHEN PPMReading = PPMReading + 5\r\n",
+      "Type": 2
+    },
+    {
+      "Name": "Spike case",
+      "Text": "IF (Counter > CounterBeforeBehavior AND Behavior = \"Spike\")\r\nTHEN PPMReading = 225",
+      "Type": 2
+    },
+    {
+      "Name": "Emit telemetry to the twin",
+      "Text": "IF (Status = \"Normal\") \r\nTHEN EMIT_TELEMETRY(\"GasSensorTwin\", \"Telemetry\")",
+      "Type": 2
+    },
+    {
+      "Name": "Sleep for 5 seconds",
+      "Text": "DO DELAY(5000)",
+      "Type": 2
+    }
+  ],
+  "Timers": [],
+  "EventListDefinitions": [],
+  "AlertProviders": [],
+  "DataCollectionDefinitions": [
+    {
+      "Name": "Telemetry",
+      "PropertiesToTrack": [
+        "PPMReading",
+        "TimeStamp"
+      ]
+    }
+  ],
+  "PropertyAnomalyDetectionDefinitions": [],
+  "DataCollectionAnomalyDetectionDefinitions": [],
+  "EnablePersistence": false,
+  "PersistenceProviderName": "",
+  "EnableMessageRecording": false,
+  "AzureDigitalTwinModelName": null
+}
