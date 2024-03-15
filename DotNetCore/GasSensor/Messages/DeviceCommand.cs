@@ -27,7 +27,8 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.Messages
 {
     /// <summary>
     /// Example of action command message 
-    /// that could be sent back to a data source.
+    /// that could be sent back to a data source 
+    /// (e.g. real or simulated gas sensor).
     /// </summary>
     public class DeviceCommand : DigitalTwinMessage
     {

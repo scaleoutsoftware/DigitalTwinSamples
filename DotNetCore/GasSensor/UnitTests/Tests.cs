@@ -76,20 +76,17 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
         public void NoAlarm()
         {
             using RealTimeWorkbench wb = new RealTimeWorkbench();
-            var endpoint = wb.AddRealTimeModel("GasSensorTwin", new GasSensorTwinMessageProcessor());
-            int ppmValue = 0;
+            var endpoint = wb.AddRealTimeModel(modelName: "GasSensorTwin", processor: new GasSensorTwinMessageProcessor());
 
-            for (int i = 0; i < GasSensorTwinModel.MaxAllowedTimePeriod.TotalSeconds; i++) 
-            {
-                ppmValue = Random.Shared.Next(1, GasSensorTwinModel.MaxAllowedPPM - 1);
+            int ppmValue = 10;
+            var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+            endpoint.Send("Sensor1", msg);
 
-                var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-                endpoint.Send("NoAlarm", msg);
+            ppmValue = 20;
+            msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+            endpoint.Send("Sensor1", msg);
 
-                Thread.Sleep(1000); // sleep for 1 second
-            }
-
-            var rtInstances = wb.GetInstances<GasSensorTwinModel>("GasSensorTwin");
+            var rtInstances = wb.GetInstances<GasSensorTwinModel>(modelName: "GasSensorTwin");
             foreach(var rtTwin in rtInstances.Values)
                 Assert.True(rtTwin.AlarmSounded == 0);
         }
@@ -98,23 +95,21 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
         public void AlarmDueToPeekValue()
         {
             using RealTimeWorkbench wb = new RealTimeWorkbench();
-            var endpoint = wb.AddRealTimeModel("GasSensorTwin", new GasSensorTwinMessageProcessor());
-            int ppmValue = 0;
+            var endpoint = wb.AddRealTimeModel(modelName: "GasSensorTwin", processor: new GasSensorTwinMessageProcessor());
 
-            for (int i = 0; i < GasSensorTwinModel.MaxAllowedTimePeriod.TotalSeconds; i++)
-            {
-                if (i % GasSensorTwinModel.MaxAllowedTimePeriod.TotalSeconds / 2 == 0)
-                    ppmValue = 250;
-                else
-                    ppmValue = Random.Shared.Next(1, GasSensorTwinModel.MaxAllowedPPM - 1);
+            int ppmValue = 10;
+            var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+            endpoint.Send("Sensor1", msg);
 
-                var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-                endpoint.Send("AlarmDueToPeekValue", msg);
+            ppmValue = 20;
+            msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+            endpoint.Send("Sensor1", msg);
 
-                Thread.Sleep(1000); // sleep for 1 second
-            }
+            ppmValue = 250;
+            msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+            endpoint.Send("Sensor1", msg);
 
-            var rtInstances = wb.GetInstances<GasSensorTwinModel>("GasSensorTwin");
+            var rtInstances = wb.GetInstances<GasSensorTwinModel>(modelName: "GasSensorTwin");
             foreach (var rtTwin in rtInstances.Values)
                 Assert.True(rtTwin.AlarmSounded == 1);
         }
@@ -123,7 +118,7 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
         public void AlarmDueToHighLevelOverTime()
         {
             using RealTimeWorkbench wb = new RealTimeWorkbench();
-            var endpoint = wb.AddRealTimeModel("GasSensorTwin", new GasSensorTwinMessageProcessor());
+            var endpoint = wb.AddRealTimeModel(modelName: "GasSensorTwin", processor: new GasSensorTwinMessageProcessor());
             int ppmValue = 0;
 
             for (int i = 0; i < GasSensorTwinModel.MaxAllowedTimePeriod.TotalSeconds + 5; i++)
@@ -131,12 +126,12 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
                 ppmValue = Random.Shared.Next(GasSensorTwinModel.MaxAllowedPPM, GasSensorTwinModel.MaxAllowedPPM + 100);
 
                 var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-                endpoint.Send("AlarmDueToHighLevelOverTime", msg);
+                endpoint.Send("Sensor1", msg);
 
                 Thread.Sleep(1000); // sleep for 1 second
             }
 
-            var rtInstances = wb.GetInstances<GasSensorTwinModel>("GasSensorTwin");
+            var rtInstances = wb.GetInstances<GasSensorTwinModel>(modelName: "GasSensorTwin");
             foreach (var rtTwin in rtInstances.Values)
                 Assert.True(rtTwin.AlarmSounded == 1);
         }

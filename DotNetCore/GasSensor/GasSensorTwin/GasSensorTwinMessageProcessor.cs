@@ -61,7 +61,8 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensorTwin
                                 if ((dt.LastPPMTime - dt.LimitStartTime) > GasSensorTwinModel.MaxAllowedTimePeriod ||
                                      msg.PPMReading >= GasSensorTwinModel.SpikeAlertPPM)
                                 {
-                                    dt.AlarmSounded = 1; // notify some personal
+                                    dt.AlarmSounded = 1; // notify personnel
+                                    context.LogMessage(LogSeverity.Warning, $"The real-time digital twin '{dt.Id}' ({dt.Site} site) has switched to the Alarmed state.");
 
                                     // CODE for BONUS TASK:
                                     var action = new DeviceCommand();
@@ -73,6 +74,9 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensorTwin
                             }
                             else
                             {
+                                if (dt.AlarmSounded == 1)
+                                    context.LogMessage(LogSeverity.Warning, $"The real-time digital twin '{dt.Id}' ({dt.Site} site) has restorated its Active state.");
+
                                 dt.AlarmSounded = 0;
                                 dt.LimitExceeded = false;
                             }
@@ -83,9 +87,9 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensorTwin
                 }
 
                 // Use the embedded logger to log messages.
-                context.LogMessage(LogSeverity.Informational,
-                                string.Format("The real-time digital twin object '{0}' has successfully processed {1} message(s)",
-                                dt.Id, newMessages.Count()));
+                //context.LogMessage(LogSeverity.Informational,
+                //                string.Format("The real-time digital twin object '{0}' has successfully processed {1} message(s)",
+                //                dt.Id, newMessages.Count()));
             }
             catch (Exception ex)
             {

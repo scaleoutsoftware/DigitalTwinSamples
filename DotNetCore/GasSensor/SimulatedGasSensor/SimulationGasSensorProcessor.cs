@@ -115,8 +115,8 @@ namespace ScaleOut.DigitalTwin.Samples.SimulatedGasSensor
                     result = Random.Shared.Next(45, 199);
                     break;
                 case "New York":
-                    if (digitalTwin.NumberOfSimIterations % 30 == 0)
-                        result = Random.Shared.Next(200, 250);
+                    if (digitalTwin.NumberOfSimIterations % 40 == 0)
+                        result = Random.Shared.Next(210, 250);
                     else
                         result = Random.Shared.Next(30, 49);
                     break;
