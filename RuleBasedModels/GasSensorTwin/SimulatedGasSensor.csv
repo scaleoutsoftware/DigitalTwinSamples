@@ -1,0 +1,5 @@
+﻿Id,Behavior,CounterBeforeBehavior,PPMReading,Status
+Seattle,Normal,100,23,Normal
+Miami,Normal,100,12,Normal
+Los Angeles,SlowRise,5,25,Normal
+New York,Spike,2,25,Normal
