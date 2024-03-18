@@ -62,7 +62,7 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensorTwin
                                      msg.PPMReading >= GasSensorTwinModel.SpikeAlertPPM)
                                 {
                                     dt.AlarmSounded = 1; // notify personnel
-                                    context.LogMessage(LogSeverity.Warning, $"The real-time digital twin '{dt.Id}' ({dt.Site} site) has switched to the Alarmed state.");
+                                    context.LogMessage(LogSeverity.Informational, $"The real-time digital twin '{dt.Id}' ({dt.Site} site) has switched to the Alarmed state.");
 
                                     // CODE for BONUS TASK:
                                     var action = new DeviceCommand();
@@ -75,7 +75,7 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensorTwin
                             else
                             {
                                 if (dt.AlarmSounded == 1)
-                                    context.LogMessage(LogSeverity.Warning, $"The real-time digital twin '{dt.Id}' ({dt.Site} site) has restorated its Active state.");
+                                    context.LogMessage(LogSeverity.Informational, $"The real-time digital twin '{dt.Id}' ({dt.Site} site) has restorated its Active state.");
 
                                 dt.AlarmSounded = 0;
                                 dt.LimitExceeded = false;

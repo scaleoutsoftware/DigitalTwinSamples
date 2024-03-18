@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/DotNetCore/GasSensor/.vs
+/DotNetCore/GasSensor/GasSensorTwin/bin
+/DotNetCore/GasSensor/GasSensorTwin/obj/Debug/net6.0
+/DotNetCore/GasSensor/GasSensorTwin/obj
+/DotNetCore/GasSensor/Messages/bin/Debug/netstandard2.1
+/DotNetCore/GasSensor/Messages/obj/Debug/netstandard2.1
+/DotNetCore/GasSensor/Messages/obj
+/DotNetCore/GasSensor/SimulatedGasSensor/bin
+/DotNetCore/GasSensor/SimulatedGasSensor/obj
+/DotNetCore/GasSensor/UnitTests/bin/Debug/net6.0
+/DotNetCore/GasSensor/UnitTests/obj
