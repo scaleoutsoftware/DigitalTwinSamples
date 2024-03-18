@@ -120,6 +120,9 @@ namespace ScaleOut.DigitalTwin.Samples.SimulatedGasSensor
                     else
                         result = Random.Shared.Next(1, 49);
                     break;
+                case "Miami Beach":
+                    result = Random.Shared.Next(51, 199);
+                    break;
                 case "New York":
                     if (dt.Id == "11697" || dt.Id == "11229" || dt.Id == "10305")
                     {
@@ -133,6 +136,9 @@ namespace ScaleOut.DigitalTwin.Samples.SimulatedGasSensor
                     }
                     else
                         result = Random.Shared.Next(20, 40);
+                    break;
+                case "New Ark":
+                    result = Random.Shared.Next(201, 251);
                     break;
                 default:
                     break;
