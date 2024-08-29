@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>2.0.0</Version>
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scaleout.DigitalTwin.Hosting" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Messages\Messages.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    
+  </PropertyGroup>
+
+  <Target Name="CompressPublishFolder" AfterTargets="Publish">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\bin\PublishedZip" />
+    <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(MSBuildProjectDirectory)\bin\PublishedZip\$(MSBuildProjectName).zip" Overwrite="true" />
+  </Target>
+
+</Project>
