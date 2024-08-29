@@ -41,8 +41,8 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
 
             var gasSimSensor1 = new SimulatedGasSensorModel { Site = "Seattle" };
             var gasSimSensor2 = new SimulatedGasSensorModel { Site = "Los Angeles" };
-            var gasSimSensor3 = new SimulatedGasSensorModel { Site = "Miami" };
-            var gasSimSensor4 = new SimulatedGasSensorModel { Site = "New York" };
+            var gasSimSensor3 = new SimulatedGasSensorModel { Site = "Miami Beach" }; // It's guaranteed to trip the threshold
+            var gasSimSensor4 = new SimulatedGasSensorModel { Site = "New Ark" };     // It's guaranteed to trip the threshold
             wb.AddInstance("Sensor1", "SimulatedGasSensor", gasSimSensor1);
             wb.AddInstance("Sensor2", "SimulatedGasSensor", gasSimSensor2);
             wb.AddInstance("Sensor3", "SimulatedGasSensor", gasSimSensor3);
@@ -50,8 +50,8 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
 
             var gasRTSensor1 = new GasSensorTwinModel { Site = "Seattle" };
             var gasRTSensor2 = new GasSensorTwinModel { Site = "Los Angeles" };
-            var gasRTSensor3 = new GasSensorTwinModel { Site = "Miami" };
-            var gasRTSensor4 = new GasSensorTwinModel { Site = "New York" };
+            var gasRTSensor3 = new GasSensorTwinModel { Site = "Miami Beach" };
+            var gasRTSensor4 = new GasSensorTwinModel { Site = "New Ark" };
             wb.AddInstance("Sensor1", "GasSensorTwin", gasRTSensor1);
             wb.AddInstance("Sensor2", "GasSensorTwin", gasRTSensor2);
             wb.AddInstance("Sensor3", "GasSensorTwin", gasRTSensor3);
@@ -65,7 +65,7 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
             //    stepResult = wb.Step();
             //} while (stepResult.SimulationStatus == SimulationStatus.Running);
 
-            wb.RunSimulation(startTime, endTime: new DateTime(year: 2023, month: 1, day: 1, hour: 0, minute: 0, second: 50), simulationIterationInterval: TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+            wb.RunSimulation(startTime, endTime: new DateTime(year: 2023, month: 1, day: 1, hour: 0, minute: 0, second: 35), simulationIterationInterval: TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
 
             var simInstances = wb.GetInstances<SimulatedGasSensorModel>("SimulatedGasSensor");
             Assert.True(simInstances["Sensor3"].SensorStatus == SensorStatus.Inactive);

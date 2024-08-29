@@ -65,13 +65,16 @@ namespace ScaleOut.DigitalTwin.Samples.SimulatedGasSensor
                     if (digitalTwin.SensorStatus == SensorStatus.Alarmed)
                     {
                         simulationController.Delay(TimeSpan.FromSeconds(30));
-                        WriteLogMessage(context, LogSeverity.Warning, message: $"A gas sensor '{digitalTwin.Id}' ({digitalTwin.Site} site) is turned off for 30 seconds.");
+                        WriteLogMessage(context, LogSeverity.Informational, message: $"A gas sensor '{digitalTwin.Id}' ({digitalTwin.Site} site) is turned off for 30 seconds.");
                         digitalTwin.SensorStatus = SensorStatus.Inactive;
                     }
                     else
                     {
                         if (digitalTwin.SensorStatus == SensorStatus.Inactive) // after delay is elapsed, make the sensor active again
+                        {
                             digitalTwin.SensorStatus = SensorStatus.Active;
+                            WriteLogMessage(context, LogSeverity.Informational, message: $"A gas sensor '{digitalTwin.Id}' ({digitalTwin.Site} site) is Active again.");
+                        }
 
                         var currentPPMValue = ProducePPMValue(digitalTwin);
                         digitalTwin.CurrentPPMValue = currentPPMValue;
@@ -99,26 +102,43 @@ namespace ScaleOut.DigitalTwin.Samples.SimulatedGasSensor
             return result;
         }
 
-        public int ProducePPMValue(SimulatedGasSensorModel digitalTwin)
+        public int ProducePPMValue(SimulatedGasSensorModel dt)
         {
             int result = 0;
 
-            switch (digitalTwin.Site)
+            switch (dt.Site)
             {
                 case "Seattle":
                     result = Random.Shared.Next(1, 30);
                     break;
                 case "Los Angeles":
-                    result = Random.Shared.Next(10, 45);
+                    result = Random.Shared.Next(5, 45);
                     break;
                 case "Miami":
-                    result = Random.Shared.Next(45, 199);
+                    if (dt.Id == "33035" || dt.Id == "33031" || dt.Id == "33189" || dt.Id == "33193" || dt.Id == "33146")
+                        result = Random.Shared.Next(40, 150);
+                    else
+                        result = Random.Shared.Next(1, 49);
+                    break;
+                case "Miami Beach":
+                    result = Random.Shared.Next(51, 199);
                     break;
                 case "New York":
-                    if (digitalTwin.NumberOfSimIterations % 40 == 0)
-                        result = Random.Shared.Next(210, 250);
+                    if (dt.Id == "11697" || dt.Id == "11229" || dt.Id == "10305")
+                    {
+                        if (dt.NumberOfSimIterations % 30 == 0)
+                        {
+                            dt.SensorStatus = SensorStatus.Alarmed;
+                            result = 210;
+                        }
+                        else
+                            result = Random.Shared.Next(1, 49);
+                    }
                     else
-                        result = Random.Shared.Next(30, 49);
+                        result = Random.Shared.Next(20, 40);
+                    break;
+                case "New Ark":
+                    result = Random.Shared.Next(201, 251);
                     break;
                 default:
                     break;
