@@ -1,0 +1,36 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project coordinates -->
+    <groupId>com.my-test-dt-model</groupId>
+  	<artifactId>my-test-dt-model</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+    
+    <!-- Parent (optional, if you have one) -->
+    <!-- <parent>...</parent> -->
+    <repositories>
+    	<repository>
+        	<id>ScaleOut API Repository</id>
+        	<url>https://repo.scaleoutsoftware.com/repository/external</url>
+		  </repository>
+	  </repositories>
+
+    <!-- Dependencies (optional, add your dependencies here) -->
+    <dependencies>
+    	<dependency>
+        	<!-- the digital twin core library, used for creating simulation and real-time digital twins -->
+          	<groupId>com.scaleoutsoftware.digitaltwin</groupId>
+          	<artifactId>core</artifactId>
+          	<version>3.0.7</version>
+        </dependency>
+        <!-- the digital twin development library, used for testing simulation and real-time digital twins on the Workbench -->
+        <dependency>
+          	<groupId>com.scaleoutsoftware.digitaltwin</groupId>
+          	<artifactId>development</artifactId>
+          	<version>3.0.7</version>
+        </dependency>
+    </dependencies>
+</project>

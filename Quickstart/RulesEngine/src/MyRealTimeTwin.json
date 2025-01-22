@@ -1,0 +1,53 @@
+{
+  "ModelName": "MyRealTimeTwin",
+  "LanguageVersion": "2",
+  "InstanceProperties": [
+    {
+      "Name": "Id",
+      "Type": 2,
+      "InitialValue": null
+    },
+    {
+      "Name": "Model",
+      "Type": 2,
+      "InitialValue": "MyRealTimeTwin"
+    },
+    {
+      "Name": "currentValue",
+      "Type": 2,
+      "InitialValue": null
+    }
+  ],
+  "MessageProperties": {
+    "Incoming": [
+      {
+        "Name": "StringPayload",
+        "Type": 2,
+        "InitialValue": null
+      }
+    ]
+  },
+  "MessageRules": [
+    {
+      "Name": "UpdateValue",
+      "Text": "DO currentValue = Incoming.StringPayload",
+      "Type": 0
+    },
+    {
+      "Name": "LogMessage",
+      "Text": "DO LOG_MESSAGE(0, \"The real-time digital twin '\" + Id + \"' says '\" + Incoming.StringPayload + \"'\")",
+      "Type": 0
+    }
+  ],
+  "SimulationRules": [],
+  "Timers": [],
+  "EventListDefinitions": [],
+  "AlertProviders": [],
+  "DataCollectionDefinitions": [],
+  "PropertyAnomalyDetectionDefinitions": [],
+  "DataCollectionAnomalyDetectionDefinitions": [],
+  "EnablePersistence": false,
+  "PersistenceProviderName": "Default",
+  "EnableMessageRecording": false,
+  "AzureDigitalTwinModelName": null
+}
