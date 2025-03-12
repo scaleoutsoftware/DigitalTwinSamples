@@ -11,26 +11,20 @@
     
     <!-- Parent (optional, if you have one) -->
     <!-- <parent>...</parent> -->
-    <repositories>
-    	<repository>
-        	<id>ScaleOut API Repository</id>
-        	<url>https://repo.scaleoutsoftware.com/repository/external</url>
-		  </repository>
-	  </repositories>
 
     <!-- Dependencies (optional, add your dependencies here) -->
     <dependencies>
-    	<dependency>
-        	<!-- the digital twin core library, used for creating simulation and real-time digital twins -->
-          	<groupId>com.scaleoutsoftware.digitaltwin</groupId>
-          	<artifactId>core</artifactId>
-          	<version>3.0.7</version>
-        </dependency>
-        <!-- the digital twin development library, used for testing simulation and real-time digital twins on the Workbench -->
-        <dependency>
-          	<groupId>com.scaleoutsoftware.digitaltwin</groupId>
-          	<artifactId>development</artifactId>
-          	<version>3.0.7</version>
-        </dependency>
+      <dependency>
+        <!-- the digital twin hosting library, used for creating simulation and real-time digital twins -->
+        <groupId>com.scaleoutsoftware.digitaltwin</groupId>
+        <artifactId>hosting</artifactId>
+        <version>3.2.1</version>
+      </dependency>
+      <!-- the digital twin development library, used for testing simulation and real-time digital twins on the Workbench -->
+      <dependency>
+        <groupId>com.scaleoutsoftware.digitaltwin</groupId>
+        <artifactId>development</artifactId>
+        <version>3.2.1</version>
+      </dependency>
     </dependencies>
 </project>
