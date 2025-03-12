@@ -1,0 +1,3 @@
+# README
+
+This folder contains a single JSON file that describes a digital twin model. The file was generated with the [ScaleOut Model Development Tool](https://static.scaleoutsoftware.com/docs/digital_twin_user_guide/rules_engine/rules_intro.html). For instructions on loading, modifying, and exporting this sample model, see the [ScaleOut Digital Twins Documentation](https://static.scaleoutsoftware.com/docs/digital_twin_user_guide/rules_engine/brief_tour.html).

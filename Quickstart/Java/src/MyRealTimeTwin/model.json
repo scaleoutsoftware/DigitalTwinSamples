@@ -1,0 +1,9 @@
+{
+	"modelType": "com.digitaltwin.example.MyRealTimeTwinModel",
+	"messageProcessorType": "com.digitaltwin.example.MyRealTimeTwinMessageProcessor",
+	"messageType": "com.digitaltwin.example.MyRealTimeTwinMessage",
+	"assemblyName": "NOT_USED_BY_JAVA_MODELS",
+	"enablePersistence": false,
+	"enableSimulationSupport": false,
+	"alertProviders": []
+} 

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "Messages\Messages.csproj", "{9B3F9600-AA6A-4156-BA76-904184D0166B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyRealTimeTwin", "MyRealTimeTwin\MyRealTimeTwin.csproj", "{DC982D14-D14F-49C5-BF19-3A5C351CCB77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B3F9600-AA6A-4156-BA76-904184D0166B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3F9600-AA6A-4156-BA76-904184D0166B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3F9600-AA6A-4156-BA76-904184D0166B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3F9600-AA6A-4156-BA76-904184D0166B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC982D14-D14F-49C5-BF19-3A5C351CCB77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC982D14-D14F-49C5-BF19-3A5C351CCB77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC982D14-D14F-49C5-BF19-3A5C351CCB77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC982D14-D14F-49C5-BF19-3A5C351CCB77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9A5A697-AD05-4A91-8F6C-3969E5DA9510}
+	EndGlobalSection
+EndGlobal
