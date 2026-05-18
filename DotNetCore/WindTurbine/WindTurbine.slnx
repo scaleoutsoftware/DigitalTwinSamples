@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="RealTimeWindTurbine/RealTimeWindTurbine.csproj" Id="c9882d7d-d20e-4efa-ac0c-9cf0b565debf" />
+  <Project Path="UnitTests/UnitTests.csproj" Id="7b05c2fd-4cc8-4fb5-857d-0e82804eb25f" />
+</Solution>

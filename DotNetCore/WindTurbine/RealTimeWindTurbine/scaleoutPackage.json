@@ -1,0 +1,11 @@
+{
+  "cmdLineParams": "RealTimeWindTurbine.dll",
+  "modules": [
+    {
+      "moduleName": "RealTimeWindTurbine",
+      "runtime": "dotnet",
+      "moduleType": "dt"
+    }
+  ]
+
+}
