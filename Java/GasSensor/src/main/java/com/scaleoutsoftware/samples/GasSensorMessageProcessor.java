@@ -1,5 +1,5 @@
 /**
- * © Copyright 2024 by ScaleOut Software, Inc.
+ * © Copyright 2026 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,34 +23,37 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.demos;
+package com.scaleoutsoftware.samples;
 
 import com.google.gson.Gson;
-import com.scaleoutsoftware.digitaltwin.core.MessageProcessor;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingContext;
-import com.scaleoutsoftware.digitaltwin.core.ProcessingResult;
+import com.scaleoutsoftware.digitaltwin.abstractions.MessageProcessor;
+import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingContext;
+import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingResult;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+public class GasSensorMessageProcessor extends MessageProcessor<GasSensor> {
 
-public class GasSensorTwinMessageProcessor extends MessageProcessor<GasSensorTwin, GasSensorTwinMessage> {
     @Override
-    public ProcessingResult processMessages(ProcessingContext processingContext,
-                                            GasSensorTwin gasSensor,
-                                            Iterable<GasSensorTwinMessage> messages) throws Exception {
-        for (GasSensorTwinMessage msg : messages)
-        {
+    public ProcessingResult processMessage(ProcessingContext<GasSensor> processingContext, GasSensor gasSensor, byte[] message) {
+        try {
+            // Add context-aware processing logic that makes use of the soss object here.
+            // EXAMPLE: Deserialize the message and update the object
+            GasSensorMessage msg = GasSensorMessage.deserialize(message);
             gasSensor.setLastPpmReading(msg.getPpmReading());
             gasSensor.setLastPpmTime(msg.getTimestamp());
 
-            if (msg.getPpmReading() > GasSensorTwin.MAX_READING_ALLOWED_PPM) // handles 50+
+            if (msg.getPpmReading() > GasSensor.MAX_READING_ALLOWED_PPM) // handles 50+
             {
                 if (!gasSensor.isLimitExceeded())
                 {
                     gasSensor.setLimitExceeded(true);
                     gasSensor.setLimitStartTime(msg.getTimestamp());
                 }
-                if (((gasSensor.getLastPpmTime() - gasSensor.getLimitStartTime())/1000) > GasSensorTwin.MAX_READING_ALLOWED_LIMIT_TIME_SECS ||
-                        gasSensor.getLastPpmReading() >= GasSensorTwin.MAX_PPM_READING_SPIKE)
+                if (((gasSensor.getLastPpmTime() - gasSensor.getLimitStartTime())/1000) > GasSensor.MAX_READING_ALLOWED_LIMIT_TIME_SECS ||
+                        gasSensor.getLastPpmReading() >= GasSensor.MAX_PPM_READING_SPIKE)
                 {
                     gasSensor.setAlarmSounded(true);
                     Gson gson = new Gson();
@@ -62,7 +65,17 @@ public class GasSensorTwinMessageProcessor extends MessageProcessor<GasSensorTwi
                 gasSensor.setLimitExceeded(false);
                 gasSensor.setAlarmSounded(false);
             }
+        } catch (Exception e) {
+            // Catch all exceptions and send an alert using the UI alerter.
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            pw.flush();
+            sw.flush();
+            processingContext.logMessage(Level.SEVERE, "Exception thrown by id" + processingContext.getDataSourceId() + " " + sw.toString());
         }
+        // Return ProcessingResult.UpdateDigitalTwin if this method modified the twin instance.
+        // If no changes occurred or the changes are to be discarded, return ProcessingResult.NoUpdate.
         return ProcessingResult.UpdateDigitalTwin;
     }
 }

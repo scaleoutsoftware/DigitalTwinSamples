@@ -1,5 +1,5 @@
 /**
- * © Copyright 2024 by ScaleOut Software, Inc.
+ * © Copyright 2026 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,26 +23,31 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.demos;
+package com.scaleoutsoftware.samples;
 
-import com.google.gson.annotations.SerializedName;
+import com.scaleoutsoftware.modules.hosting.ModulePackage;
+import com.scaleoutsoftware.modules.hosting.DigitalTwinModelOptions;
+import com.scaleoutsoftware.modules.hosting.DigitalTwinModelOptionsBuilder;
+import com.scaleoutsoftware.modules.hosting.ModuleRegistrationException;
 
-public class GasSensorTwinMessage {
-    @SerializedName("PPMReading")
-    private int	    _ppmReading;
-    @SerializedName("Timestamp")
-    private long    _timestamp;
-
-    public GasSensorTwinMessage(int reading, long time) {
-        _ppmReading = reading;
-        _timestamp = time;
-    }
-
-    public int getPpmReading() {
-        return _ppmReading;
-    }
-
-    public long getTimestamp() {
-        return _timestamp;
+/**
+ * A real-time digital twin's entry point. Run "mvn package" to build the deployable ZIP package.
+ */
+public class Main {
+    public static void main(String[] args) {
+        // instantiate the module package
+        ModulePackage modulePackage = new ModulePackage();
+        // define the DigitalTwinModelOptions
+        DigitalTwinModelOptions<GasSensor> digitalTwinModelOptions = new DigitalTwinModelOptionsBuilder<GasSensor>(GasSensor.class).build();
+        // add the Digital Twin model to the package
+        modulePackage.addDigitalTwinModel("GasSensor", new GasSensorMessageProcessor(), digitalTwinModelOptions);
+        try {
+            // wait for events
+            modulePackage.waitForEvents();
+        } catch (ModuleRegistrationException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

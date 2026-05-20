@@ -1,5 +1,5 @@
 /**
- * © Copyright 2024 by ScaleOut Software, Inc.
+ * © Copyright 2026 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,12 +23,13 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.demos;
+package com.scaleoutsoftware.samples;
 
 import com.google.gson.annotations.SerializedName;
-import com.scaleoutsoftware.digitaltwin.core.DigitalTwinBase;
+import com.scaleoutsoftware.digitaltwin.abstractions.DigitalTwinBase;
 
-public class GasSensorTwin extends DigitalTwinBase {
+// SOSS object definition for a RealTime digital twin
+public class GasSensor extends DigitalTwinBase<GasSensor> {
     // static constants
     public static final int MAX_READING_ALLOWED_PPM = 50;
     public static final int MAX_READING_ALLOWED_LIMIT_TIME_SECS = 30;

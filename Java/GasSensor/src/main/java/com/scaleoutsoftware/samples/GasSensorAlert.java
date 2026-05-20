@@ -1,5 +1,5 @@
 /**
- * © Copyright 2024 by ScaleOut Software, Inc.
+ * © Copyright 2026 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,7 +23,7 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.demos;
+package com.scaleoutsoftware.samples;
 
 import com.google.gson.annotations.SerializedName;
 

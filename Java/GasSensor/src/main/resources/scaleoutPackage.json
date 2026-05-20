@@ -1,0 +1,10 @@
+{
+    "cmdLineParams": "com.scaleoutsoftware.samples.Main",
+    "modules": [
+        {
+            "moduleName": "GasSensor",
+            "runtime": "java",
+            "moduleType": "dt"
+        }
+    ]
+}
