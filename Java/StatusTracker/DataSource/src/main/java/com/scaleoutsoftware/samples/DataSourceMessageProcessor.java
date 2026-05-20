@@ -23,32 +23,29 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.mycompany.digitaltwin;
+package com.scaleoutsoftware.samples;
 
-import java.io.IOException;
-import com.scaleoutsoftware.modules.hosting.ModulePackage;
-import com.scaleoutsoftware.modules.hosting.DigitalTwinModelOptions;
-import com.scaleoutsoftware.modules.hosting.DigitalTwinModelOptionsBuilder;
-import com.scaleoutsoftware.modules.hosting.ModuleRegistrationException;
+import com.google.gson.Gson;
+import com.scaleoutsoftware.digitaltwin.abstractions.MessageProcessor;
+import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingContext;
+import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-/**
- * A real-time digital twin's entry point. Run "mvn package" to build the deployable ZIP package.
- */
-public class Main {
-    public static void main(String[] args) {
-        // instantiate the module package
-        ModulePackage modulePackage = new ModulePackage();
-        // define the DigitalTwinModelOptions
-        DigitalTwinModelOptions<MyRealtimeTwin> digitalTwinModelOptions = new DigitalTwinModelOptionsBuilder<MyRealtimeTwin>(MyRealtimeTwin.class).build();
-        // add the Digital Twin model to the package
-        modulePackage.addDigitalTwinModel("MyRealtimeTwin", new MyRealtimeTwinMessageProcessor(), digitalTwinModelOptions);
-        try {
-            // wait for events
-            modulePackage.waitForEvents();
-        } catch (ModuleRegistrationException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+import java.nio.charset.StandardCharsets;
+
+public class DataSourceMessageProcessor extends MessageProcessor<DataSource> {
+    Gson gson = new Gson();
+
+    @Override
+    public ProcessingResult processMessage(ProcessingContext<DataSource> processingContext, DataSource dataSource, byte[] bytes) throws Exception {
+        Logger logger = LogManager.getLogger(DataSourceMessageProcessor.class);
+
+        DataSourceMessage msg = gson.fromJson(new String(bytes, StandardCharsets.UTF_8), DataSourceMessage.class);
+        if(msg.attack()) {
+            dataSource.setAttacked(true);
         }
+
+        return ProcessingResult.UpdateDigitalTwin;
     }
 }

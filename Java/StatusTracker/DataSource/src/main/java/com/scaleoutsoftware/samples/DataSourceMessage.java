@@ -23,32 +23,52 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.mycompany.digitaltwin;
+package com.scaleoutsoftware.samples;
 
-import java.io.IOException;
-import com.scaleoutsoftware.modules.hosting.ModulePackage;
-import com.scaleoutsoftware.modules.hosting.DigitalTwinModelOptions;
-import com.scaleoutsoftware.modules.hosting.DigitalTwinModelOptionsBuilder;
-import com.scaleoutsoftware.modules.hosting.ModuleRegistrationException;
+public class DataSourceMessage {
+    private String nodeType;
+    private String status;
+    private String region;
+    private double longitude;
+    private double latitude;
+    private boolean attacked;
 
-/**
- * A real-time digital twin's entry point. Run "mvn package" to build the deployable ZIP package.
- */
-public class Main {
-    public static void main(String[] args) {
-        // instantiate the module package
-        ModulePackage modulePackage = new ModulePackage();
-        // define the DigitalTwinModelOptions
-        DigitalTwinModelOptions<MyRealtimeTwin> digitalTwinModelOptions = new DigitalTwinModelOptionsBuilder<MyRealtimeTwin>(MyRealtimeTwin.class).build();
-        // add the Digital Twin model to the package
-        modulePackage.addDigitalTwinModel("MyRealtimeTwin", new MyRealtimeTwinMessageProcessor(), digitalTwinModelOptions);
-        try {
-            // wait for events
-            modulePackage.waitForEvents();
-        } catch (ModuleRegistrationException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public DataSourceMessage() {
+    }
+
+    public DataSourceMessage(boolean atk) {
+        attacked = atk;
+    }
+
+    public DataSourceMessage(String nt, String st, String r, double lo, double la) {
+        nodeType   = nt;
+        status     = st;
+        region     = r;
+        longitude  = lo;
+        latitude   = la;
+    }
+
+    public boolean attack() {
+        return attacked;
+    }
+
+    public String getNodeType() {
+        return nodeType;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2026 by ScaleOut Software, Inc.
+ * (C) Copyright 2024 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -23,33 +23,19 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
+package com.scaleoutsoftware.samples;
 
-package com.mycompany.digitaltwin;
-
-import com.google.gson.Gson;
-import com.scaleoutsoftware.digitaltwin.abstractions.MessageProcessor;
 import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingContext;
 import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingResult;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import com.scaleoutsoftware.digitaltwin.abstractions.TimerHandler;
+
 import java.util.logging.Level;
 
-public class MyRealtimeTwinMessageProcessor extends MessageProcessor<MyRealtimeTwin> {
+public class AttackTimer implements TimerHandler<DataSource> {
     @Override
-    public ProcessingResult processMessage(ProcessingContext<MyRealtimeTwin> processingContext, MyRealtimeTwin instance, byte[] message) {
-        try {
-            Gson gson = new Gson();
-            ExampleMessage msg = gson.fromJson(new String(message, StandardCharsets.UTF_8), ExampleMessage.class);
-            instance.setCurrentValue(msg.getStringPayload());
-        } catch (Exception e) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            pw.flush();
-            sw.flush();
-            processingContext.logMessage(Level.SEVERE, "Exception thrown by id" + processingContext.getDataSourceId() + " " + sw.toString());
-        }
+    public ProcessingResult onTimedMessage(String timerName, DataSource dataSource, ProcessingContext processingContext) {
+        processingContext.logMessage(Level.INFO, String.format("DataSource (%s) was attacked!", processingContext.getDataSourceId()));
+        dataSource.setAttacked(true);
         return ProcessingResult.UpdateDigitalTwin;
     }
 }

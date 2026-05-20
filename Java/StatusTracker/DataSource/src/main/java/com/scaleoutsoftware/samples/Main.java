@@ -23,7 +23,7 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.mycompany.digitaltwin;
+package com.scaleoutsoftware.samples;
 
 import java.io.IOException;
 import com.scaleoutsoftware.modules.hosting.ModulePackage;
@@ -39,9 +39,9 @@ public class Main {
         // instantiate the module package
         ModulePackage modulePackage = new ModulePackage();
         // define the DigitalTwinModelOptions
-        DigitalTwinModelOptions<MyRealtimeTwin> digitalTwinModelOptions = new DigitalTwinModelOptionsBuilder<MyRealtimeTwin>(MyRealtimeTwin.class).build();
+        DigitalTwinModelOptions<DataSource> digitalTwinModelOptions = new DigitalTwinModelOptionsBuilder<DataSource>(DataSource.class).build();
         // add the Digital Twin model to the package
-        modulePackage.addDigitalTwinModel("MyRealtimeTwin", new MyRealtimeTwinMessageProcessor(), digitalTwinModelOptions);
+        modulePackage.addSimulationDigitalTwinModel("DataSource", new DataSourceMessageProcessor(), new DataSourceSimulationProcessor(), digitalTwinModelOptions);
         try {
             // wait for events
             modulePackage.waitForEvents();
