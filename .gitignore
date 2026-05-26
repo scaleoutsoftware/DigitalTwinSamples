@@ -369,3 +369,5 @@ FodyWeavers.xsd
 /DotNetCore/GasSensor/SimulatedGasSensor/obj/Debug/net6.0/SimulatedGasSensor.GeneratedMSBuildEditorConfig.editorconfig
 /DotNetCore/GasSensor/UnitTests/obj/Debug/net6.0/UnitTests.AssemblyInfoInputs.cache
 /DotNetCore/GasSensor/UnitTests/obj/Debug/net6.0/UnitTests.GeneratedMSBuildEditorConfig.editorconfig
+/Java/StatusTracker/DataSource/target
+/Java/StatusTracker/StatusTracker/target

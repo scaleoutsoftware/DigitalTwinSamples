@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "RealTimeRealTimeWindTurbine": {
+    "MyMessageModule": {
       "commandName": "Project",
       "commandLineArgs": "--debug",
       "environmentVariables": {

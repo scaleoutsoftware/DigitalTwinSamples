@@ -1,0 +1,11 @@
+Id,nodeType,status,region,longitude,latitude,attacked
+10132,infrastructure,green,NE,-73.977182,40.780751,false
+10131,infrastructure,green,NE,-73.977182,40.780751,false
+10133,infrastructure,green,NE,-73.977182,40.780751,false
+10122,controller,green,NE,-73.992171,40.751757,false
+10125,infrastructure,green,NE,-73.977182,40.780751,false
+10124,infrastructure,green,NE,-73.977182,40.780751,false
+98082,controller,yellow,NW,-121.803388,47.432251,false
+98073,infrastructure,green,NW,-121.803388,47.432251,false
+98072,infrastructure,green,NW,-122.10205,47.758786,false
+98075,infrastructure,green,NW,-122.033685,47.584879,false
