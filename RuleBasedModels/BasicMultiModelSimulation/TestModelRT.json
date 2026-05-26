@@ -1,7 +1,7 @@
 {
   "ModelName": "TestModelRT",
   "LanguageVersion": "2",
-  "InstanceProperties": [
+  "InstancePropertyDefinitions": [
     {
       "Name": "Id",
       "Type": 2,
@@ -13,7 +13,7 @@
       "InitialValue": "TestModelRT"
     }
   ],
-  "MessageProperties": {
+  "MessagePropertiesDefinition": {
     "Incoming": [
       {
         "Name": "Counter",
@@ -32,7 +32,6 @@
   "SimulationRules": [],
   "Timers": [],
   "EventListDefinitions": [],
-  "AlertProviders": [],
   "DataCollectionDefinitions": [
     {
       "Name": "ToDataSource",
@@ -44,7 +43,7 @@
   ],
   "PropertyAnomalyDetectionDefinitions": [],
   "DataCollectionAnomalyDetectionDefinitions": [],
-  "EnablePersistence": false,
-  "PersistenceProviderName": "Default",
+  "MachineLearningTrainedAlgorithmInfos": [],
+  "MachineLearningAlgorithmRetrainingSettings": [],
   "AzureDigitalTwinModelName": null
 }

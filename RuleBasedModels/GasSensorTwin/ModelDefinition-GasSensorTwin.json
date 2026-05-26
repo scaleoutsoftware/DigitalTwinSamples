@@ -1,17 +1,7 @@
 {
   "ModelName": "GasSensorTwin",
   "LanguageVersion": "2",
-  "InstanceProperties": [
-    {
-      "Name": "Id",
-      "Type": 2,
-      "InitialValue": null
-    },
-    {
-      "Name": "Model",
-      "Type": 2,
-      "InitialValue": "GasSensorTwin"
-    },
+  "InstancePropertyDefinitions": [
     {
       "Name": "LastPPMReading",
       "Type": 1,
@@ -25,7 +15,7 @@
     {
       "Name": "LimitExceeded",
       "Type": 3,
-      "InitialValue": "False"
+      "InitialValue": "false"
     },
     {
       "Name": "AlarmSounded",
@@ -71,9 +61,19 @@
       "Name": "Status",
       "Type": 2,
       "InitialValue": "Normal"
+    },
+    {
+      "Name": "Model",
+      "Type": 2,
+      "InitialValue": "GasSensorTwin"
+    },
+    {
+      "Name": "Id",
+      "Type": 2,
+      "InitialValue": null
     }
   ],
-  "MessageProperties": {
+  "MessagePropertiesDefinition": {
     "Incoming": [
       {
         "Name": "PPMReading",
@@ -120,9 +120,8 @@
     }
   ],
   "SimulationRules": [],
-  "Timers": [],
+  "TimerDefinitions": [],
   "EventListDefinitions": [],
-  "AlertProviders": [],
   "DataCollectionDefinitions": [
     {
       "Name": "StatusData",
@@ -134,8 +133,7 @@
   ],
   "PropertyAnomalyDetectionDefinitions": [],
   "DataCollectionAnomalyDetectionDefinitions": [],
-  "EnablePersistence": false,
-  "PersistenceProviderName": "Default",
-  "EnableMessageRecording": false,
+  "MachineLearningTrainedAlgorithmInfos": [],
+  "MachineLearningAlgorithmRetrainingSettings": [],
   "AzureDigitalTwinModelName": null
 }

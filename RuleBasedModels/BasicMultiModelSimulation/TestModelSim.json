@@ -1,7 +1,7 @@
 {
   "ModelName": "TestModelSim",
   "LanguageVersion": "2",
-  "InstanceProperties": [
+  "InstancePropertyDefinitions": [
     {
       "Name": "Id",
       "Type": 2,
@@ -23,7 +23,7 @@
       "InitialValue": "1000"
     }
   ],
-  "MessageProperties": {
+  "MessagePropertiesDefinition": {
     "Incoming": [
       {
         "Name": "Id",
@@ -73,7 +73,6 @@
   ],
   "Timers": [],
   "EventListDefinitions": [],
-  "AlertProviders": [],
   "DataCollectionDefinitions": [
     {
       "Name": "Telemetry",
@@ -84,7 +83,7 @@
   ],
   "PropertyAnomalyDetectionDefinitions": [],
   "DataCollectionAnomalyDetectionDefinitions": [],
-  "EnablePersistence": false,
-  "PersistenceProviderName": "Default",
+  "MachineLearningTrainedAlgorithmInfos": [],
+  "MachineLearningAlgorithmRetrainingSettings": [],
   "AzureDigitalTwinModelName": null
 }

@@ -1,16 +1,16 @@
 {
   "ModelName": "SimulatedGasSensor",
   "LanguageVersion": "2",
-  "InstanceProperties": [
-    {
-      "Name": "Id",
-      "Type": 2,
-      "InitialValue": null
-    },
+  "InstancePropertyDefinitions": [
     {
       "Name": "Model",
       "Type": 2,
       "InitialValue": "SimulatedGasSensor"
+    },
+    {
+      "Name": "Id",
+      "Type": 2,
+      "InitialValue": null
     },
     {
       "Name": "Behavior",
@@ -43,7 +43,7 @@
       "InitialValue": "Normal"
     }
   ],
-  "MessageProperties": {
+  "MessagePropertiesDefinition": {
     "Incoming": [
       {
         "Name": "AlarmSounded",
@@ -91,9 +91,8 @@
       "Type": 2
     }
   ],
-  "Timers": [],
+  "TimerDefinitions": [],
   "EventListDefinitions": [],
-  "AlertProviders": [],
   "DataCollectionDefinitions": [
     {
       "Name": "Telemetry",
@@ -105,8 +104,7 @@
   ],
   "PropertyAnomalyDetectionDefinitions": [],
   "DataCollectionAnomalyDetectionDefinitions": [],
-  "EnablePersistence": false,
-  "PersistenceProviderName": "",
-  "EnableMessageRecording": false,
+  "MachineLearningTrainedAlgorithmInfos": [],
+  "MachineLearningAlgorithmRetrainingSettings": [],
   "AzureDigitalTwinModelName": null
 }
