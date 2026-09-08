@@ -5,6 +5,11 @@
             "moduleName": "StatusTracker",
             "runtime": "java",
             "moduleType": "dt"
+        },
+        {
+            "moduleName": "DataSource",
+            "runtime": "java",
+            "moduleType": "dt"
         }
     ]
 }

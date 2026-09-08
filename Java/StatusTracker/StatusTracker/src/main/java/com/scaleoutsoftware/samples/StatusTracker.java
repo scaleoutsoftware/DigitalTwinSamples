@@ -27,6 +27,8 @@ package com.scaleoutsoftware.samples;
 
 
 import com.scaleoutsoftware.digitaltwin.abstractions.DigitalTwinBase;
+import com.scaleoutsoftware.modules.abstractions.ModuleAiMetadata;
+import com.scaleoutsoftware.modules.abstractions.PropertyAiMetadata;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,22 +37,36 @@ import java.util.Objects;
 /**
  * StatusTracker class used to represent Infrastructure and Controller power grid nodes.
  */
+@ModuleAiMetadata(description = "A StatusTracker instance represents a Infrastructure or Controller power grid node.", keyProperties = {"alert_level"})
 public class StatusTracker extends DigitalTwinBase<StatusTracker> {
     // State variables
+    @PropertyAiMetadata(type = "String", description = "node_type represents either a controller or infrastructure node.")
     public String node_type;
+    @PropertyAiMetadata(type = "String", description = "node_condition details the condition of a status tracker node. possible values: offline normal minor moderate severe. Expected value is normal.", units = "string", minValue = "offline", maxValue = "severe")
     public String node_condition;
+    @PropertyAiMetadata(type = "String", description = "region details the geographical region of the node. Possible values: NW SW MN MS NE SE", units = "String")
     public String region;
+    @PropertyAiMetadata(type = "Double", description = "Longitude is the geographic coordinate specifying the east-west position of a point on Earth's surface", units = "Angular Degrees")
     public double Longitude;
+    @PropertyAiMetadata(type = "Double", description = "Latitude is the measurement of distance north or south of the equator", units = "Angular Degrees")
     public double Latitude;
 
     // Derived state variables
+    @PropertyAiMetadata(type = "int", description = "Alert level describes how the node is doing relative to the most recent messages that this node has processed", units = "derived value", minValue = "1", maxValue = "20")
     public int alert_level; // alert level visible in the demo
+    @PropertyAiMetadata(type = "int", description = "The number of minor incidents this status tracker node has experienced", units = "count")
     public int minorIncidentCount;
+    @PropertyAiMetadata(type = "int", description = "The number of moderate incidents this status tracker node has experienced", units = "count")
     public int moderateIncidentCount;
+    @PropertyAiMetadata(type = "int", description = "The number of false incidents this status tracker node has experienced", units = "count")
     public int falseIncidentCount;
+    @PropertyAiMetadata(type = "int", description = "The number of severe incidents this status tracker node has experienced", units = "count")
     public int severeIncidentCount;
+    @PropertyAiMetadata(type = "int", description = "The total number of incidents (all types) that this status tracker node has experienced", units = "count")
     public int totalIncidents;
+    @PropertyAiMetadata(type = "int", description = "The total number of incidents (all types) that this status tracker node has resolved", units = "count")
     public int totalResolvedIncidents;
+    @PropertyAiMetadata(type = "boolean", description = "True if this node is currently experiencing an incident, false otherwise", units = "boolean", minValue = "false", maxValue = "true")
     public boolean experiencingIncident;
 
     // Dynamic incident report list
