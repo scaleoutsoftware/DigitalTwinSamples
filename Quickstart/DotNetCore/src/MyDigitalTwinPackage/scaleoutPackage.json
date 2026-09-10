@@ -1,0 +1,11 @@
+{
+  "cmdLineParams": "MyDigitalTwinPackage.dll",
+  "modules": [
+    {
+      "moduleName": "MyRealTimeTwin",
+      "runtime": "dotnet",
+      "moduleType": "dt"
+    }
+  ]
+
+}
