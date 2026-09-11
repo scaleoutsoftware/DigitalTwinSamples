@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2024 by ScaleOut Software, Inc.")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("ScaleOut Software sample - GasSensor unit test project.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbdc6e1899d90ab7d3888a2669533aa4b4012984")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScaleOut Digital Twins™")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UnitTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

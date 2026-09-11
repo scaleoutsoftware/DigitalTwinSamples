@@ -24,20 +24,27 @@
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
 using Scaleout.DigitalTwin.Workbench;
-using ScaleOut.DigitalTwin.Samples.GasSensorTwin;
-using ScaleOut.DigitalTwin.Samples.SimulatedGasSensor;
-using ScaleOut.DigitalTwin.Samples.GasSensor.Messages;
+using GasSensorPackage;
+using GasSensorPackage.SimulatedGasSensor;
+using GasSensorPackage.RealTimeGasSensor;
+using GasSensorPackage.Messages;
 
 namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
 {
     public class Tests
     {
         [Fact]
-        public void TestSimulation()
+        public async Task TestSimulation()
         {
             SimulationWorkbench wb = new SimulationWorkbench();
-            wb.AddSimulationModel("SimulatedGasSensor", new SimulationGasSensorProcessor(), new SimulatedGasSensorMessageProcessor());
-            wb.AddRealTimeModel("GasSensorTwin", new GasSensorTwinMessageProcessor());
+            wb.AddSimulationModel(
+                "SimulatedGasSensor", 
+                new SimulatedGasSensorSimulationProcessor(null), 
+                new SimulatedGasSensorMessageProcessor(null));
+
+            wb.AddRealTimeModel(
+                "RealTimeGasSensor", 
+                new RealTimeGasSensorMessageProcessor(null));
 
             var gasSimSensor1 = new SimulatedGasSensorModel { Site = "Seattle" };
             var gasSimSensor2 = new SimulatedGasSensorModel { Site = "Los Angeles" };
@@ -48,14 +55,14 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
             wb.AddInstance("Sensor3", "SimulatedGasSensor", gasSimSensor3);
             wb.AddInstance("Sensor4", "SimulatedGasSensor", gasSimSensor4);
 
-            var gasRTSensor1 = new GasSensorTwinModel { Site = "Seattle" };
-            var gasRTSensor2 = new GasSensorTwinModel { Site = "Los Angeles" };
-            var gasRTSensor3 = new GasSensorTwinModel { Site = "Miami Beach" };
-            var gasRTSensor4 = new GasSensorTwinModel { Site = "New Ark" };
-            wb.AddInstance("Sensor1", "GasSensorTwin", gasRTSensor1);
-            wb.AddInstance("Sensor2", "GasSensorTwin", gasRTSensor2);
-            wb.AddInstance("Sensor3", "GasSensorTwin", gasRTSensor3);
-            wb.AddInstance("Sensor4", "GasSensorTwin", gasRTSensor4);
+            var gasRTSensor1 = new RealTimeGasSensorModel { Site = "Seattle" };
+            var gasRTSensor2 = new RealTimeGasSensorModel { Site = "Los Angeles" };
+            var gasRTSensor3 = new RealTimeGasSensorModel { Site = "Miami Beach" };
+            var gasRTSensor4 = new RealTimeGasSensorModel { Site = "New Ark" };
+            wb.AddInstance("Sensor1", "RealTimeGasSensor", gasRTSensor1);
+            wb.AddInstance("Sensor2", "RealTimeGasSensor", gasRTSensor2);
+            wb.AddInstance("Sensor3", "RealTimeGasSensor", gasRTSensor3);
+            wb.AddInstance("Sensor4", "RealTimeGasSensor", gasRTSensor4);
 
             DateTime startTime = new DateTime(year: 2023, month: 1, day: 1, hour: 0, minute: 0, second: 0);
             //wb.InitializeSimulation(startTime, endTime: new DateTime(year: 2023, month: 1, day: 1, hour: 0, minute: 1, second: 0), simulationIterationInterval: TimeSpan.FromSeconds(1));
@@ -65,7 +72,7 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
             //    stepResult = wb.Step();
             //} while (stepResult.SimulationStatus == SimulationStatus.Running);
 
-            wb.RunSimulation(startTime, endTime: new DateTime(year: 2023, month: 1, day: 1, hour: 0, minute: 0, second: 35), simulationIterationInterval: TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+            await wb.RunSimulationAsync(startTime, endTime: new DateTime(year: 2023, month: 1, day: 1, hour: 0, minute: 0, second: 35), simulationIterationInterval: TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
 
             var simInstances = wb.GetInstances<SimulatedGasSensorModel>("SimulatedGasSensor");
             Assert.True(simInstances["Sensor3"].SensorStatus == SensorStatus.Inactive);
@@ -73,65 +80,71 @@ namespace ScaleOut.DigitalTwin.Samples.GasSensor.UnitTests
         }
 
         [Fact]
-        public void NoAlarm()
+        public async Task NoAlarm()
         {
             using RealTimeWorkbench wb = new RealTimeWorkbench();
-            var endpoint = wb.AddRealTimeModel(modelName: "GasSensorTwin", processor: new GasSensorTwinMessageProcessor());
+            var endpoint = wb.AddRealTimeModel(modelName: "RealTimeGasSensor", new RealTimeGasSensorMessageProcessor(null));
 
             int ppmValue = 10;
-            var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-            endpoint.Send("Sensor1", msg);
+            BaseMessage msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+            byte[] msgBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(msg);
+            await endpoint.SendAsync("Sensor1", msgBytes);
 
             ppmValue = 20;
             msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-            endpoint.Send("Sensor1", msg);
+            msgBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(msg);
+            await endpoint.SendAsync("Sensor1", msgBytes);
 
-            var rtInstances = wb.GetInstances<GasSensorTwinModel>(modelName: "GasSensorTwin");
+            var rtInstances = wb.GetInstances<RealTimeGasSensorModel>(modelName: "RealTimeGasSensor");
             foreach(var rtTwin in rtInstances.Values)
                 Assert.True(rtTwin.AlarmSounded == 0);
         }
 
         [Fact]
-        public void AlarmDueToPeekValue()
+        public async Task AlarmDueToPeakValue()
         {
             using RealTimeWorkbench wb = new RealTimeWorkbench();
-            var endpoint = wb.AddRealTimeModel(modelName: "GasSensorTwin", processor: new GasSensorTwinMessageProcessor());
+            var endpoint = wb.AddRealTimeModel(modelName: "RealTimeGasSensor", processor: new RealTimeGasSensorMessageProcessor(null));
 
             int ppmValue = 10;
-            var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-            endpoint.Send("Sensor1", msg);
+            BaseMessage msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+            byte[] msgBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(msg);
+            await endpoint.SendAsync("Sensor1", msgBytes);
 
             ppmValue = 20;
             msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-            endpoint.Send("Sensor1", msg);
+            msgBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(msg);
+            await endpoint.SendAsync("Sensor1", msgBytes);
 
             ppmValue = 250;
             msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-            endpoint.Send("Sensor1", msg);
+            msgBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(msg);
+            await endpoint.SendAsync("Sensor1", msgBytes);
 
-            var rtInstances = wb.GetInstances<GasSensorTwinModel>(modelName: "GasSensorTwin");
+            var rtInstances = wb.GetInstances<RealTimeGasSensorModel>(modelName: "RealTimeGasSensor");
             foreach (var rtTwin in rtInstances.Values)
                 Assert.True(rtTwin.AlarmSounded == 1);
         }
 
         [Fact]
-        public void AlarmDueToHighLevelOverTime()
+        public async Task AlarmDueToHighLevelOverTime()
         {
             using RealTimeWorkbench wb = new RealTimeWorkbench();
-            var endpoint = wb.AddRealTimeModel(modelName: "GasSensorTwin", processor: new GasSensorTwinMessageProcessor());
+            var endpoint = wb.AddRealTimeModel(modelName: "RealTimeGasSensor", processor: new RealTimeGasSensorMessageProcessor(null));
             int ppmValue = 0;
 
-            for (int i = 0; i < GasSensorTwinModel.MaxAllowedTimePeriod.TotalSeconds + 5; i++)
+            for (int i = 0; i < RealTimeGasSensorModel.MaxAllowedTimePeriod.TotalSeconds + 5; i++)
             {
-                ppmValue = Random.Shared.Next(GasSensorTwinModel.MaxAllowedPPM, GasSensorTwinModel.MaxAllowedPPM + 100);
+                ppmValue = RealTimeGasSensorModel.MaxAllowedPPM + 100;
 
-                var msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
-                endpoint.Send("Sensor1", msg);
+                BaseMessage msg = new GasSensorTelemetry { PPMReading = ppmValue, Timestamp = DateTime.UtcNow };
+                byte[] msgBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(msg);
+                await endpoint.SendAsync("Sensor1", msgBytes);
 
-                Thread.Sleep(1000); // sleep for 1 second
+                await Task.Delay(1000); // sleep for 1 second
             }
 
-            var rtInstances = wb.GetInstances<GasSensorTwinModel>(modelName: "GasSensorTwin");
+            var rtInstances = wb.GetInstances<RealTimeGasSensorModel>(modelName: "RealTimeGasSensor");
             foreach (var rtTwin in rtInstances.Values)
                 Assert.True(rtTwin.AlarmSounded == 1);
         }

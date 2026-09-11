@@ -1,0 +1,16 @@
+{
+  "cmdLineParams": "GasSensorPackage.dll",
+  "modules": [
+    {
+      "moduleName": "RealTimeGasSensor",
+      "runtime": "dotnet",
+      "moduleType": "dt"
+    },
+    {
+      "moduleName": "SimulatedGasSensor",
+      "runtime": "dotnet",
+      "moduleType": "dt"
+    }
+  ]
+
+}

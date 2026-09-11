@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "GasSensorPackage": {
+      "commandName": "Project",
+      "commandLineArgs": "--debug",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

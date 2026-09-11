@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="gassensor_initfile.csv" />
+  </Folder>
+  <Project Path="GasSensorPackage/GasSensorPackage.csproj" Id="9ac86c85-4b69-4f7e-b550-afba21a5af04" />
+  <Project Path="UnitTests/UnitTests.csproj" />
+</Solution>
