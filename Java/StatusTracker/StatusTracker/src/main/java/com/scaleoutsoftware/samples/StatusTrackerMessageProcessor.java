@@ -26,12 +26,10 @@
 package com.scaleoutsoftware.samples;
 
 import com.google.gson.Gson;
-import com.scaleout.client.GridConnection;
-import com.scaleout.client.caching.Cache;
-import com.scaleout.client.caching.CacheBuilder;
 import com.scaleoutsoftware.digitaltwin.abstractions.MessageProcessor;
 import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingContext;
 import com.scaleoutsoftware.digitaltwin.abstractions.ProcessingResult;
+import com.scaleoutsoftware.modules.abstractions.ModuleAiMetadata;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

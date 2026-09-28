@@ -39,9 +39,12 @@ public class Main {
         // instantiate the module package
         ModulePackage modulePackage = new ModulePackage();
         // define the DigitalTwinModelOptions
-        DigitalTwinModelOptions<StatusTracker> digitalTwinModelOptions = new DigitalTwinModelOptionsBuilder<StatusTracker>(StatusTracker.class).build();
+        DigitalTwinModelOptions<StatusTracker> statusTrackerOptions = new DigitalTwinModelOptionsBuilder<StatusTracker>(StatusTracker.class).build();
         // add the Digital Twin model to the package
-        modulePackage.addDigitalTwinModel("StatusTracker", new StatusTrackerMessageProcessor(), digitalTwinModelOptions);
+        modulePackage.addDigitalTwinModel("StatusTracker", new StatusTrackerMessageProcessor(), statusTrackerOptions);
+        DigitalTwinModelOptions<DataSource> dataSourceOptions = new DigitalTwinModelOptionsBuilder<DataSource>(DataSource.class).build();
+        // add the Digital Twin model to the package
+        modulePackage.addSimulationDigitalTwinModel("DataSource", new DataSourceMessageProcessor(), new DataSourceSimulationProcessor(), dataSourceOptions);
         try {
             // wait for events
             modulePackage.waitForEvents();
